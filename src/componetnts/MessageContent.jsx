@@ -8,9 +8,14 @@ const Message = ({ type, text, status, date, scrollRef }) => {
     <div ref={scrollRef} className={`message ${type}`}>
       <p className="message-text inline">{text}</p>
       <div className="message-info">
-        <span className={`message-status ${status.toLowerCase()}`}>
-          {status}
-        </span>
+        {type === "sending" ? (
+          <span className={`message-status ${status.toLowerCase()}`}>
+            {status}
+          </span>
+        ) : (
+          ""
+        )}
+
         <span className="message-date">
           {hours}:{minutes}
         </span>

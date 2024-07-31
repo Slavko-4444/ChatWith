@@ -34,8 +34,16 @@ const Messenger = () => {
 
   const getMessage = async () => {
     try {
-      const response = await axios.get(
-        `/api/api/chat-with/get-messages/${currFriend._id}`
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      let data = { status: "seen" };
+      const response = await axios.put(
+        `/api/api/chat-with/get-messages/${currFriend._id}`,
+        data,
+        config
       );
       setMessage(response.data.message);
     } catch (error) {
