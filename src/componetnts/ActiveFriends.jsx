@@ -2,7 +2,6 @@ import React from "react";
 import "../css/ActiveFriends.css";
 
 const ActiveFriends = ({ actives }) => {
-  // console.log("sta je to", actives);
   return (
     <div className="friend-active-list gap-1 px-2">
       {actives && actives.length ? (

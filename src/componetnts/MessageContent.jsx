@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/MessageContent.css";
+import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
+import { useRecoilValue } from "recoil";
 
 const Message = ({ type, text, status, date, scrollRef }) => {
   const [dt, time] = date.split("T");
@@ -23,7 +25,9 @@ const Message = ({ type, text, status, date, scrollRef }) => {
     </div>
   );
 };
-const MessageContent = ({ message, senderId, scrollRef }) => {
+const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
+  const currFriend = useRecoilValue(currentFriendAtom);
+
   return (
     <div className="top-24 bottom-16  message-content">
       {message?.map((msg, index) => {
@@ -40,6 +44,16 @@ const MessageContent = ({ message, senderId, scrollRef }) => {
           />
         );
       })}
+      {/* check this variable here */}
+      {typingMessage &&
+      typingMessage.cleanTypeDots === false &&
+      typingMessage.senderId === currFriend._id ? (
+        <div ref={scrollRef} className="text-gray-400 pl-3">
+          {currFriend.userName.split(" ")[0]}'s typing...
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

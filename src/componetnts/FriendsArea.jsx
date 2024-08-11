@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import "../css/FriendsArea.css";
 import UserInfo from "./UserInfo";
 import ActiveFriends from "./ActiveFriends";
@@ -20,6 +20,7 @@ const FriendsArea = () => {
     async function fetchData() {
       try {
         const response = await axios.get("/api/api/chat-with/get-friends");
+
         setFriends(response.data.friends);
         setCurrFriend({
           userName: response.data.friends[0].userName,
@@ -28,7 +29,7 @@ const FriendsArea = () => {
           _id: response.data.friends[0]._id,
         });
       } catch (error) {
-        console.log("sta je", error.response.data.error.errorMessage);
+        console.log(error.response.data.error.errorMessage);
       }
     }
 

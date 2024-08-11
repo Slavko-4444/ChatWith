@@ -12,25 +12,37 @@ import {
 } from "../recoil/atoms/friendsAtoms";
 import { userAtom } from "../recoil/atoms/userAtoms";
 import { io } from "socket.io-client";
-
 import axios from "axios";
 import { MessagesAtom } from "../recoil/atoms/messageAtoms";
 import { jwtDecode } from "jwt-decode";
+import { NotificationOfCommingMessageAtom } from "../recoil/atoms/notificationAtoms";
+import sendingSound from "../audio/message-sending.mp3";
+import receivingSound from "../audio/sending2.mp3";
+import useSound from "use-sound";
 
 const Messenger = () => {
   const scrollRef = useRef();
   const afSocket = useRef();
+  const [typingMessage, setTypingMessage] = useState({});
   const decoded = jwtDecode(localStorage.getItem("authToken"));
 
   const currFriend = useRecoilValue(currentFriendAtom);
   const [currentFriends, setCurrentFrineds] = useRecoilState(
     activefriendsListAtom
   );
+
   const [userData, setUserData] = useRecoilState(userAtom);
   const [message, setMessage] = useRecoilState(MessagesAtom);
+  const [notificationMessage, setNotificationMessage] = useRecoilState(
+    NotificationOfCommingMessageAtom
+  );
   const [isChecked, setIsChecked] = useState(false);
   const [text, setText] = useState("");
   const [socketMessage, setSocketMessage] = useState("");
+
+  //sound instances...
+  const [sendingSPlay] = useSound(sendingSound);
+  const [receivingSPlay] = useSound(receivingSound);
 
   const getMessage = async () => {
     try {
@@ -68,14 +80,30 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
-    if (socketMessage && currFriend)
+    afSocket.current.on("typingMessageGet", (data) => {
+      if (data.cleanTypeDots === true) setTypingMessage({});
+      else setTypingMessage(data);
+    });
+  }, []);
+
+  // receive live sent message over socket connection...
+  useEffect(() => {
+    if (socketMessage && currFriend) {
+      // if it matches with current friend
       if (
         socketMessage.senderId === currFriend._id &&
         socketMessage.receiverId === userData.id
       ) {
         setMessage([...message, socketMessage]);
+        receivingSPlay();
+      } else if (
+        socketMessage.senderId !== currFriend._id &&
+        socketMessage.receiverId === userData.id
+      ) {
         setSocketMessage("");
+        setNotificationMessage([...notificationMessage, socketMessage]);
       }
+    }
   }, [socketMessage]);
 
   useEffect(() => {}, [message]);
@@ -111,7 +139,7 @@ const Messenger = () => {
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({
-      behavior: "smooth",
+      // behavior: "smooth",
       block: "end",
       inline: "nearest",
     });
@@ -128,6 +156,7 @@ const Messenger = () => {
   };
 
   const sendMessage = async () => {
+    sendingSPlay();
     const messageBlock = {
       senderName: userData.userName,
       receiverId: currFriend._id,
@@ -138,13 +167,21 @@ const Messenger = () => {
         "Content-Type": "application/json",
       },
     };
-
     try {
       const response = await axios.post(
         "/api/api/chat-with/send-message",
         messageBlock,
         config
       );
+
+      const socketdata = { receiverId: currFriend._id, senderId: userData.id };
+
+      afSocket?.current.emit("typingMessage", {
+        ...socketdata,
+        msg: "",
+        cleanTypeDots: true,
+      });
+
       afSocket.current.emit("sendMessage", {
         senderId: userData.id,
         senderName: userData.userName,
@@ -182,11 +219,16 @@ const Messenger = () => {
             message={message}
             senderId={userData.id}
             scrollRef={scrollRef}
+            socket={afSocket.current}
+            typingMessage={typingMessage}
           />
+
           <MessageSend
             text={text}
             setText={setText}
             sendMessage={sendMessage}
+            socket={afSocket.current}
+            socketdata={{ receiverId: currFriend._id, senderId: userData.id }}
           />
         </div>
 

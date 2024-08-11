@@ -5,17 +5,45 @@ import {
   currentFriendAtom,
   friendsListAtom,
 } from "../recoil/atoms/friendsAtoms";
+import { HiOutlineChatBubbleOvalLeftEllipsis } from "react-icons/hi2";
+import { NotificationOfCommingMessageAtom } from "../recoil/atoms/notificationAtoms";
+import useSound from "use-sound";
+import notificationSound from "../audio/notification.mp3";
 
 const FriendBlock = ({ friend }) => {
+  const [notificationMessage, setNotificationMessage] = useRecoilState(
+    NotificationOfCommingMessageAtom
+  );
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
+  const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
+  const [notificationSPlay] = useSound(notificationSound);
 
-  const toggleMessageContent = () =>
+  useEffect(() => {
+    if (
+      notificationMessage.length &&
+      notificationMessage.some((item, index) => item.senderId === friend._id) &&
+      currFriend._id !== friend._id
+    ) {
+      notificationSPlay();
+      setHasUnreadMessage(true);
+    } else setHasUnreadMessage(false);
+  }, [notificationMessage]);
+
+  const toggleMessageContent = () => {
     setCurrFriend({
       userName: friend.userName,
       email: friend.email,
       image: friend.image,
       _id: friend._id,
     });
+
+    if (hasUnreadMessage) {
+      let copyList = notificationMessage.filter(
+        (item) => item.senderId !== friend._id
+      );
+      setNotificationMessage(copyList);
+    }
+  };
 
   return (
     <div
@@ -27,8 +55,17 @@ const FriendBlock = ({ friend }) => {
         className="friend-image f-i"
         alt="opa"
       />
-      <p className="ml-3 font-semibold lg:text-xl text-sm capitalize">
+      <p className="ml-3 font-semibold lg:text-xl text-sm capitalize flex">
         {friend.userName}
+        {hasUnreadMessage ? (
+          <HiOutlineChatBubbleOvalLeftEllipsis
+            className="ml-1"
+            color="green"
+            size={24}
+          />
+        ) : (
+          ""
+        )}
       </p>
     </div>
   );

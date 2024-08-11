@@ -6,19 +6,27 @@ import { FaRegPaperPlane } from "react-icons/fa";
 import { BsEmojiWink } from "react-icons/bs";
 import { SiLiberadotchat } from "react-icons/si";
 
-const MessageSend = ({ text, setText, sendMessage }) => {
+const MessageSend = ({ text, setText, sendMessage, socket, socketdata }) => {
   const [subimtClass, SetSubmitClass] = useState("send-letter");
 
   const handleInput = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
     setText(e.target.value);
-  };
 
+    if (socket)
+      socket?.emit("typingMessage", {
+        ...socketdata,
+        msg: e.target.value,
+        cleanTypeDots: e.target.value.length ? false : true,
+      });
+  };
   const handleSubmit = () => {
-    setTimeout(() => SetSubmitClass("send-letter"), 400);
-    SetSubmitClass("send-letter send-letter-v2");
-    sendMessage();
+    if (text.length) {
+      setTimeout(() => SetSubmitClass("send-letter"), 400);
+      SetSubmitClass("send-letter send-letter-v2");
+      sendMessage();
+    }
   };
   return (
     <div className="absolute bottom-0 h-16 bg-slate-50 border-y message-send px-5 grid items-center grid-row grid-cols-12">

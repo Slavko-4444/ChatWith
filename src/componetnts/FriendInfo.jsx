@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../css/FriendInfo.css";
 import { useRecoilValue } from "recoil";
-import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
+import {
+  activefriendsListAtom,
+  currentFriendAtom,
+} from "../recoil/atoms/friendsAtoms";
+import { useBeforeUnload } from "react-router-dom";
 
 const ImagesData = () => {
   return (
@@ -31,6 +35,15 @@ const FriendInfo = () => {
   });
 
   const currFriend = useRecoilValue(currentFriendAtom);
+  const activeFriends = useRecoilValue(activefriendsListAtom);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (currFriend && activeFriends.length)
+      if (activeFriends.some((frnd, index) => frnd.id === currFriend._id))
+        setIsActive(true);
+      else setIsActive(false);
+  }, [activeFriends, currFriend]);
 
   const onClickItmeEvent = (msg) => {
     let newItems = {
@@ -53,7 +66,15 @@ const FriendInfo = () => {
       </div>
       <div className="m-4 p-1 border border-x-0 h-14 hover:p-2 hover:h-16 hover:cursor-pointer transition-all">
         <p className="text-center text-xl capitalize">{currFriend.userName}</p>
-        <p className="text-center text-green-600 font-semibold">Active</p>
+        <p
+          className={
+            isActive === true
+              ? "text-center text-green-600 font-semibold"
+              : "text-center text-black font-semibold"
+          }
+        >
+          {isActive === true ? "Active" : "Ofline"}
+        </p>
       </div>
       <div className="p-2 m-4 h-28 xl:h-14  grid grid-row grid-cols-1 xl:grid-cols-3 gap-4">
         <div
