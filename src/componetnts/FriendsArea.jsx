@@ -19,7 +19,7 @@ const FriendsArea = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("/api/api/chat-with/get-friends");
+        const response = await axios.get("/api/api/chat-with/get-last-message");
 
         setFriends(response.data.friends);
         setCurrFriend({

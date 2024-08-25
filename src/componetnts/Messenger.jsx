@@ -134,7 +134,7 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
-    getMessage();
+    if (currFriend._id) getMessage();
   }, [currFriend]);
 
   useEffect(() => {
