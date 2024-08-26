@@ -9,6 +9,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   activefriendsListAtom,
   currentFriendAtom,
+  friendsListAtom,
 } from "../recoil/atoms/friendsAtoms";
 import { userAtom } from "../recoil/atoms/userAtoms";
 import { io } from "socket.io-client";
@@ -31,6 +32,7 @@ const Messenger = () => {
     activefriendsListAtom
   );
 
+  const [friends, setFriends] = useRecoilState(friendsListAtom);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [message, setMessage] = useRecoilState(MessagesAtom);
   const [notificationMessage, setNotificationMessage] = useRecoilState(
@@ -44,6 +46,7 @@ const Messenger = () => {
   const [sendingSPlay] = useSound(sendingSound);
   const [receivingSPlay] = useSound(receivingSound);
 
+  // take all messages of the current chat box...
   const getMessage = async () => {
     try {
       const config = {
@@ -57,11 +60,57 @@ const Messenger = () => {
         data,
         config
       );
+
+      const sender = friends.some((friend) => {
+        if (friend.msgInfo && friend.msgInfo.senderId === currFriend._id)
+          return true;
+      });
+      if (sender)
+        afSocket.current.emit("seen-message", {
+          readenFromId: userData.id,
+          notifyId: currFriend._id,
+          status: "seen",
+        });
       setMessage(response.data.message);
     } catch (error) {
       console.log(error.response);
     }
   };
+
+  function updateMessageStatusToSeen(senderId, newStatus) {
+    setFriends((prevFriends) =>
+      prevFriends.map((friend) => {
+        if (friend.msgInfo && friend.msgInfo.senderId === senderId) {
+          return {
+            ...friend,
+            msgInfo: {
+              ...friend.msgInfo,
+              status: newStatus,
+            },
+          };
+        }
+        return friend;
+      })
+    );
+  }
+
+  // update last message info in friends list...
+  function updateMessageInFriendList(msgInfo) {
+    setFriends((prevFriends) =>
+      prevFriends.map((friend) => {
+        if (
+          friend._id === msgInfo.senderId ||
+          friend._id === msgInfo.receiverId
+        ) {
+          return {
+            ...friend,
+            msgInfo: msgInfo,
+          };
+        }
+        return friend;
+      })
+    );
+  }
 
   useEffect(() => {
     if (!userData.id)
@@ -86,14 +135,15 @@ const Messenger = () => {
     });
   }, []);
 
-  // receive live sent message over socket connection...
   useEffect(() => {
+    updateMessageInFriendList(socketMessage);
+
     if (socketMessage && currFriend) {
-      // if it matches with current friend
       if (
         socketMessage.senderId === currFriend._id &&
         socketMessage.receiverId === userData.id
       ) {
+        // setting last received message into live chat box
         setMessage([...message, socketMessage]);
         receivingSPlay();
       } else if (
@@ -105,6 +155,23 @@ const Messenger = () => {
       }
     }
   }, [socketMessage]);
+
+  // updating status of messages in live!
+  useEffect(() => {
+    afSocket.current.on("updateMessageStatus", (data) => {
+      if (data.notifyId === userData.id) {
+        let copyFriends = friends.map((friend) => {
+          let curFr = friend;
+
+          if (curFr._id === data.readenFromId)
+            curFr.msgInfo.status = data.status;
+
+          return curFr;
+        });
+        setFriends(copyFriends);
+      }
+    });
+  }, []);
 
   useEffect(() => {}, [message]);
 
@@ -181,12 +248,24 @@ const Messenger = () => {
         msg: "",
         cleanTypeDots: true,
       });
-
+      const currTime = new Date();
       afSocket.current.emit("sendMessage", {
         senderId: userData.id,
         senderName: userData.userName,
         receiverId: currFriend._id,
-        time: new Date(),
+        time: currTime,
+        message: {
+          text: text,
+          image: "",
+        },
+      });
+
+      updateMessageInFriendList({
+        senderId: userData.id,
+        senderName: userData.userName,
+        receiverId: currFriend._id,
+        time: currTime,
+        status: "unseen",
         message: {
           text: text,
           image: "",

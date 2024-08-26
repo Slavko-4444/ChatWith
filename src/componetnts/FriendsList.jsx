@@ -46,6 +46,15 @@ const FriendBlock = ({ friend, msgInfo }) => {
     }
   };
 
+  const [seenColor, setSeenColor] = useState("slate");
+
+  useEffect(() => {
+    if (msgInfo && msgInfo.status === "seen") setSeenColor("green");
+    else setSeenColor("slate");
+  }, []);
+
+  const green = "green";
+
   return (
     <div
       className="group p-2 border-y h-24 firend-element flex items-center hover:bg-slate-300 hover:cursor-pointer "
@@ -59,7 +68,7 @@ const FriendBlock = ({ friend, msgInfo }) => {
       <div className="flex ml-3 flex-col">
         <p className="font-semibold lg:text-xl text-sm capitalize flex">
           {friend.userName}
-          {!hasUnreadMessage ? (
+          {hasUnreadMessage ? (
             <HiOutlineChatBubbleOvalLeftEllipsis
               className="ml-1"
               color="green"
@@ -70,13 +79,26 @@ const FriendBlock = ({ friend, msgInfo }) => {
           )}
         </p>
         {msgInfo ? (
-          <p className="text-pink-200 group-hover:text-slate-600 flex items-center">
+          <p className="text-slate-400 group-hover:text-slate-600 flex items-center">
             {msgInfo.senderId === friend._id
-              ? msgInfo.senderName + ": "
+              ? msgInfo.senderName.split(" ")[0] + ": "
               : "You: "}
             {msgInfo.message.text}
-            <FiCheck className="ml-1 text-slate-700" size={"1.3rem"} />
-            <FiCheck className=" text-slate-700" size={"1.3rem"} />
+            {msgInfo.senderId != friend._id ? (
+              <>
+                <FiCheck
+                  className={`ml-1 text-${seenColor}-300 group-hover:text-${seenColor}-600`}
+                  size={"1.3rem"}
+                />
+                <FiCheck
+                  className={`text-${seenColor}-300 group-hover:text-${seenColor}-600`}
+                  size={"1.3rem"}
+                  style={{ marginLeft: "-0.8rem" }}
+                />
+              </>
+            ) : (
+              ""
+            )}
           </p>
         ) : (
           ""
@@ -88,17 +110,6 @@ const FriendBlock = ({ friend, msgInfo }) => {
 
 const FriendsList = () => {
   const friends = useRecoilValue(friendsListAtom);
-  const msgInfo = {
-    message: {
-      text: "cao",
-      image: "",
-    },
-    _id: "66be09e9498c4fc1e4c781d5",
-    senderId: "66a1568f228fb31ade6777bf",
-    senderName: "slavko sosic",
-    receiverId: "66a1570e228fb31ade6777c3",
-    status: "unseen",
-  };
 
   return (
     <div className="mt-2 friend-list-all flex-1 overflow-y-auto">
