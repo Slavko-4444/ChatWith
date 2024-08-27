@@ -136,7 +136,6 @@ const Messenger = () => {
 
   useEffect(() => {
     afSocket.current.on("updateMessageStatus", (data) => {
-      console.log("trebalo bi da je isto", data.senderId, userData.id);
       updateMessageStatusToSeen(data.senderId, data.status);
     });
   }, []);
