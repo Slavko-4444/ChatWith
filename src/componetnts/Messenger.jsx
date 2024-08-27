@@ -61,16 +61,14 @@ const Messenger = () => {
         config
       );
 
-      const sender = friends.some((friend) => {
-        if (friend.msgInfo && friend.msgInfo.senderId === currFriend._id)
-          return true;
+      const currIsActive = currentFriends.some((friend) => {
+        if (friend.id === currFriend._id) return true;
+        return false;
       });
-      if (sender)
-        afSocket.current.emit("seen-message", {
-          readenFromId: userData.id,
-          notifyId: currFriend._id,
-          status: "seen",
-        });
+
+      // update notification for seen status of message...
+      if (currIsActive) setSeen(currFriend._id, userData.id);
+
       setMessage(response.data.message);
     } catch (error) {
       console.log(error.response);
@@ -112,6 +110,14 @@ const Messenger = () => {
     );
   }
 
+  function setSeen(senderId, receiverId) {
+    afSocket.current.emit("seenMessage", {
+      receiverId: receiverId,
+      senderId: senderId,
+      status: "seen",
+    });
+  }
+
   useEffect(() => {
     if (!userData.id)
       setUserData({
@@ -129,6 +135,13 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
+    afSocket.current.on("updateMessageStatus", (data) => {
+      console.log("trebalo bi da je isto", data.senderId, userData.id);
+      updateMessageStatusToSeen(data.senderId, data.status);
+    });
+  }, []);
+
+  useEffect(() => {
     afSocket.current.on("typingMessageGet", (data) => {
       if (data.cleanTypeDots === true) setTypingMessage({});
       else setTypingMessage(data);
@@ -136,6 +149,7 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
+    // this is for last message notification on side bar...
     updateMessageInFriendList(socketMessage);
 
     if (socketMessage && currFriend) {
@@ -146,6 +160,7 @@ const Messenger = () => {
         // setting last received message into live chat box
         setMessage([...message, socketMessage]);
         receivingSPlay();
+        setSeen(socketMessage.senderId, userData.id);
       } else if (
         socketMessage.senderId !== currFriend._id &&
         socketMessage.receiverId === userData.id
@@ -155,23 +170,6 @@ const Messenger = () => {
       }
     }
   }, [socketMessage]);
-
-  // updating status of messages in live!
-  useEffect(() => {
-    afSocket.current.on("updateMessageStatus", (data) => {
-      if (data.notifyId === userData.id) {
-        let copyFriends = friends.map((friend) => {
-          let curFr = friend;
-
-          if (curFr._id === data.readenFromId)
-            curFr.msgInfo.status = data.status;
-
-          return curFr;
-        });
-        setFriends(copyFriends);
-      }
-    });
-  }, []);
 
   useEffect(() => {}, [message]);
 
@@ -186,9 +184,6 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
-    afSocket.current.on("getActives", (data) => {
-      setCurrentFrineds(data);
-    });
     afSocket.current.on("getUser", (data) => {
       setCurrentFrineds(data);
     });

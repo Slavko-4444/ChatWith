@@ -46,15 +46,6 @@ const FriendBlock = ({ friend, msgInfo }) => {
     }
   };
 
-  const [seenColor, setSeenColor] = useState("slate");
-
-  useEffect(() => {
-    if (msgInfo && msgInfo.status === "seen") setSeenColor("green");
-    else setSeenColor("slate");
-  }, []);
-
-  const green = "green";
-
   return (
     <div
       className="group p-2 border-y h-24 firend-element flex items-center hover:bg-slate-300 hover:cursor-pointer "
@@ -87,11 +78,19 @@ const FriendBlock = ({ friend, msgInfo }) => {
             {msgInfo.senderId != friend._id ? (
               <>
                 <FiCheck
-                  className={`ml-1 text-${seenColor}-300 group-hover:text-${seenColor}-600`}
+                  className={`${
+                    msgInfo && msgInfo.status === "seen"
+                      ? "ml-1 text-green-300 group-hover:text-green-600"
+                      : "ml-1 text-slate-300 group-hover:text-slate-600"
+                  }`}
                   size={"1.3rem"}
                 />
                 <FiCheck
-                  className={`text-${seenColor}-300 group-hover:text-${seenColor}-600`}
+                  className={`${
+                    msgInfo && msgInfo.status === "seen"
+                      ? "text-green-300 group-hover:text-green-600"
+                      : "text-slate-300 group-hover:text-slate-600"
+                  }`}
                   size={"1.3rem"}
                   style={{ marginLeft: "-0.8rem" }}
                 />
