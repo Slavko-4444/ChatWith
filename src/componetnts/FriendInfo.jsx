@@ -64,7 +64,7 @@ const FriendInfo = () => {
           alt="image-profile"
         />
       </div>
-      <div className="m-4 p-1 border border-x-0 h-14 hover:p-2 hover:h-16 hover:cursor-pointer transition-all">
+      <div className="m-4 p-1 border border-x-0 h-14  transition-all">
         <p className="text-center text-xl capitalize">{currFriend.userName}</p>
         <p
           className={
@@ -78,19 +78,19 @@ const FriendInfo = () => {
       </div>
       <div className="p-2 m-4 h-28 xl:h-14  grid grid-row grid-cols-1 xl:grid-cols-3 gap-4">
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-400 text-white font-semibold hover:cursor-pointer hover:bg-slate-500"
+          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("images")}
         >
           # images
         </div>
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-400 text-white font-semibold hover:cursor-pointer hover:bg-slate-500"
+          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("links")}
         >
           # links
         </div>
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-400 text-white font-semibold hover:cursor-pointer hover:bg-slate-500"
+          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("chatInfo")}
         >
           <p># chat info</p>

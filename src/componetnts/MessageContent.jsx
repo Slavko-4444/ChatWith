@@ -2,18 +2,30 @@ import React, { useEffect, useState } from "react";
 import "../css/MessageContent.css";
 import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
 import { useRecoilValue } from "recoil";
+import { PiEyeClosedDuotone } from "react-icons/pi";
+import { PiEyeBold } from "react-icons/pi";
 
-const Message = ({ type, text, status, date, scrollRef }) => {
+const Message = ({ type, text, status, date, scrollRef, image }) => {
   const [dt, time] = date.split("T");
   const [hours, minutes] = time.split(":");
+  const [textPosition, setTextPosition] = useState();
+  useEffect(() => {
+    if (type === "sending") setTextPosition("message-text text-end");
+    else setTextPosition("message-text");
+  }, [type]);
   return (
     <div ref={scrollRef} className={`message ${type}`}>
-      <p className="message-text inline">{text}</p>
+      {image ? <img src={`/images/${image}`} className="h-80 w-96" /> : ""}
+      <p className={textPosition}>{text}</p>
       <div className="message-info">
         {type === "sending" ? (
-          <span className={`message-status ${status.toLowerCase()}`}>
-            {status}
-          </span>
+          <>
+            {status && status === "unseen" ? (
+              <PiEyeClosedDuotone className="size-5 text-slate-500 mr-2" />
+            ) : (
+              <PiEyeBold className="size-5 text-slate-500 mr-2" />
+            )}
+          </>
         ) : (
           ""
         )}
@@ -27,7 +39,6 @@ const Message = ({ type, text, status, date, scrollRef }) => {
 };
 const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
   const currFriend = useRecoilValue(currentFriendAtom);
-
   return (
     <div className="top-24 bottom-16  message-content">
       {message?.map((msg, index) => {
@@ -41,6 +52,7 @@ const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
             date={msg.updatedAt}
             key={index}
             scrollRef={scrollRef}
+            image={msg.message.image}
           />
         );
       })}

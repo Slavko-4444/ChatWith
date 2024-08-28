@@ -24,7 +24,8 @@ import useSound from "use-sound";
 const Messenger = () => {
   const scrollRef = useRef();
   const afSocket = useRef();
-  const [typingMessage, setTypingMessage] = useState({});
+  const [typingMessage, setTypingMessage] = useState();
+  const [imageToSend, setImageToSend] = useState();
   const decoded = jwtDecode(localStorage.getItem("authToken"));
 
   const currFriend = useRecoilValue(currentFriendAtom);
@@ -39,7 +40,7 @@ const Messenger = () => {
     NotificationOfCommingMessageAtom
   );
   const [isChecked, setIsChecked] = useState(false);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(null);
   const [socketMessage, setSocketMessage] = useState("");
 
   //sound instances...
@@ -195,7 +196,11 @@ const Messenger = () => {
   }, []);
 
   useEffect(() => {
-    if (currFriend._id) getMessage();
+    if (currFriend._id) {
+      getMessage();
+      // restarting posible sotred value...
+      setImageToSend(null);
+    }
   }, [currFriend]);
 
   useEffect(() => {
@@ -216,25 +221,30 @@ const Messenger = () => {
     setIsChecked(!isChecked);
   };
 
+  // sending text...
   const sendMessage = async () => {
     sendingSPlay();
-    const messageBlock = {
-      senderName: userData.userName,
-      receiverId: currFriend._id,
-      message: text,
-    };
+    let newImageName;
+    if (imageToSend) newImageName = Date.now() + imageToSend.name;
+
+    const formData = new FormData();
+    formData.append("senderName", userData.userName);
+    formData.append("imageName", newImageName);
+    formData.append("receiverId", currFriend._id);
+    formData.append("image", imageToSend);
+    if (text) formData.append("text", text);
+
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
     try {
       const response = await axios.post(
-        "/api/api/chat-with/send-message",
-        messageBlock,
+        "/api/api/chat-with/send-message-full",
+        formData,
         config
       );
-
       const socketdata = { receiverId: currFriend._id, senderId: userData.id };
 
       afSocket?.current.emit("typingMessage", {
@@ -242,6 +252,7 @@ const Messenger = () => {
         msg: "",
         cleanTypeDots: true,
       });
+
       const currTime = new Date();
       afSocket.current.emit("sendMessage", {
         senderId: userData.id,
@@ -250,7 +261,7 @@ const Messenger = () => {
         time: currTime,
         message: {
           text: text,
-          image: "",
+          image: newImageName,
         },
       });
 
@@ -262,12 +273,13 @@ const Messenger = () => {
         status: "unseen",
         message: {
           text: text,
-          image: "",
+          image: newImageName,
         },
       });
 
       getMessage();
       setText("");
+      setImageToSend(null);
     } catch (error) {
       console.log(error.response);
     }
@@ -302,6 +314,8 @@ const Messenger = () => {
             sendMessage={sendMessage}
             socket={afSocket.current}
             socketdata={{ receiverId: currFriend._id, senderId: userData.id }}
+            imageToSend={imageToSend}
+            setImageToSend={setImageToSend}
           />
         </div>
 

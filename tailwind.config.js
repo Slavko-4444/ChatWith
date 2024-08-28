@@ -4,6 +4,19 @@ module.exports = {
   darkMode: "selector",
   theme: {
     extend: {
+      keyframes: {
+        "pop-up": {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(-100%)" },
+        },
+        "pop-down": {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(-100%)" },
+        },
+      },
+      animation: {
+        "pop-up": "pop-up 1s forwards",
+      },
       colors: {
         primary: {
           50: "#fafaf9",
