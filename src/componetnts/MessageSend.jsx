@@ -33,6 +33,7 @@ const MessageSend = ({
   };
   const handleSubmit = () => {
     if ((text && text.length) || imageToSend) {
+      setTrackImageState("hidden");
       setTimeout(() => SetSubmitClass("send-letter"), 400);
       SetSubmitClass("send-letter send-letter-v2");
       sendMessage();

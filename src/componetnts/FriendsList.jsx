@@ -74,7 +74,13 @@ const FriendBlock = ({ friend, msgInfo }) => {
             {msgInfo.senderId === friend._id
               ? msgInfo.senderName.split(" ")[0] + ": "
               : "You: "}
-            {msgInfo.message.text}
+            {msgInfo.message.text ? (
+              msgInfo.message.text
+            ) : msgInfo.message.image ? (
+              <i> image</i>
+            ) : (
+              ""
+            )}
             {msgInfo.senderId != friend._id ? (
               <>
                 <FiCheck

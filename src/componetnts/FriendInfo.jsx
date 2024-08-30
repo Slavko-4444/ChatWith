@@ -5,16 +5,62 @@ import {
   activefriendsListAtom,
   currentFriendAtom,
 } from "../recoil/atoms/friendsAtoms";
-import { useBeforeUnload } from "react-router-dom";
+import axios from "axios";
+import { MessagesAtom } from "../recoil/atoms/messageAtoms";
 
 const ImagesData = () => {
+  const currFriend = useRecoilValue(currentFriendAtom);
+  const [chatImages, setChatImages] = useState([]);
+  const messages = useRecoilValue(MessagesAtom);
+
+  const processMessage = (message) => {
+    // Destructure the input message
+    const {
+      message: msgContent,
+      _id,
+      senderId,
+      senderName,
+      createdAt,
+      __v,
+    } = message;
+
+    const outputMessage = {
+      messageId: _id,
+      image: msgContent.image,
+      senderId: senderId,
+      senderName: senderName,
+      createdAt: createdAt,
+    };
+
+    return outputMessage;
+  };
+  useEffect(() => {
+    (async () => {
+      // try {
+      //   const response = await axios.get(
+      //     `/api/api/chat-with/get-images/${currFriend._id}`
+      //   );
+      //   if (response.data) setChatImages(response.data.message);
+      // } catch (error) {
+      //   console.log("something went wrong...", error);
+      // }
+      setChatImages(
+        messages.filter((msg) => msg.message.image).map(processMessage)
+      );
+    })();
+  }, [messages]);
+  useEffect(() => console.log(chatImages), [chatImages]);
   return (
     <div className="data-show m-4 h-auto  rounded overflow-y-auto grid grid-cols-1 xl:grid-cols-2">
-      <div className="h-40 border">1</div>
-      <div className="h-40 border">1</div>
-      <div className="h-40 border">1</div>
-      <div className="h-40 border">1</div>
-      <div className="h-40 border">1</div>
+      {chatImages.map((imgData) => (
+        <div className="">
+          <img
+            src={"/images/" + imgData.image}
+            className="object-fill h-48 w-full rounded-2xl p-1"
+            alt="opa"
+          />
+        </div>
+      ))}
     </div>
   );
 };
