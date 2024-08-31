@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
 import "../css/FriendInfo.css";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   activefriendsListAtom,
   currentFriendAtom,
 } from "../recoil/atoms/friendsAtoms";
-import axios from "axios";
 import { MessagesAtom } from "../recoil/atoms/messageAtoms";
+import { SelectedImageAtom } from "../recoil/atoms/notificationAtoms";
 
 const ImagesData = () => {
-  const currFriend = useRecoilValue(currentFriendAtom);
   const [chatImages, setChatImages] = useState([]);
   const messages = useRecoilValue(MessagesAtom);
+  const [selectedImage, setSelectedImage] = useRecoilState(SelectedImageAtom); // State to track the selected image
 
   const processMessage = (message) => {
-    // Destructure the input message
     const {
       message: msgContent,
       _id,
       senderId,
       senderName,
       createdAt,
-      __v,
     } = message;
 
     const outputMessage = {
@@ -36,28 +34,27 @@ const ImagesData = () => {
   };
   useEffect(() => {
     (async () => {
-      // try {
-      //   const response = await axios.get(
-      //     `/api/api/chat-with/get-images/${currFriend._id}`
-      //   );
-      //   if (response.data) setChatImages(response.data.message);
-      // } catch (error) {
-      //   console.log("something went wrong...", error);
-      // }
       setChatImages(
         messages.filter((msg) => msg.message.image).map(processMessage)
       );
     })();
   }, [messages]);
-  useEffect(() => console.log(chatImages), [chatImages]);
+
+  const handleImageClick = (imgData) => {
+    setSelectedImage({
+      ...imgData,
+    });
+  };
+
   return (
-    <div className="data-show m-4 h-auto  rounded overflow-y-auto grid grid-cols-1 xl:grid-cols-2">
-      {chatImages.map((imgData) => (
-        <div className="">
+    <div className="data-show m-4 h-auto relative rounded overflow-y-auto grid grid-cols-1 xl:grid-cols-2">
+      {chatImages.map((imgData, key) => (
+        <div className="" key={key}>
           <img
             src={"/images/" + imgData.image}
-            className="object-fill h-48 w-full rounded-2xl p-1"
+            className="object-fill h-48 w-full rounded-2xl p-1 hover:cursor-pointer"
             alt="opa"
+            onClick={() => handleImageClick(imgData)}
           />
         </div>
       ))}

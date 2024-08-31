@@ -16,7 +16,10 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { MessagesAtom } from "../recoil/atoms/messageAtoms";
 import { jwtDecode } from "jwt-decode";
-import { NotificationOfCommingMessageAtom } from "../recoil/atoms/notificationAtoms";
+import {
+  NotificationOfCommingMessageAtom,
+  SelectedImageAtom,
+} from "../recoil/atoms/notificationAtoms";
 import sendingSound from "../audio/message-sending.mp3";
 import receivingSound from "../audio/sending2.mp3";
 import useSound from "use-sound";
@@ -36,11 +39,13 @@ const Messenger = () => {
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [message, setMessage] = useRecoilState(MessagesAtom);
+  const [selectedImage, setSelectedImage] = useRecoilState(SelectedImageAtom);
+
   const [notificationMessage, setNotificationMessage] = useRecoilState(
     NotificationOfCommingMessageAtom
   );
   const [isChecked, setIsChecked] = useState(false);
-  const [text, setText] = useState(null);
+  const [text, setText] = useState();
   const [socketMessage, setSocketMessage] = useState("");
 
   //sound instances...
@@ -128,8 +133,7 @@ const Messenger = () => {
         image: `/images/${decoded.image}`,
       });
 
-    afSocket.current = io("ws://localhost:8000");
-
+    afSocket.current = io("http://localhost:5000");
     afSocket.current.on("getMessage", (data) => {
       setSocketMessage(data);
     });
@@ -198,14 +202,12 @@ const Messenger = () => {
   useEffect(() => {
     if (currFriend._id) {
       getMessage();
-      // restarting posible sotred value...
       setImageToSend(null);
     }
   }, [currFriend]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({
-      // behavior: "smooth",
       block: "end",
       inline: "nearest",
     });
@@ -285,6 +287,15 @@ const Messenger = () => {
     }
   };
 
+  const closeModal = () => {
+    setSelectedImage({
+      createdAt: null,
+      image: null,
+      messageId: null,
+      senderId: null,
+      senderName: null,
+    });
+  };
   return (
     <div className="h-screen w-full flex box-conent">
       <div className="w-3/12 bg-white-800">
@@ -323,6 +334,28 @@ const Messenger = () => {
           <FriendInfo />
         </div>
       </div>
+      {selectedImage.image && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+          onClick={closeModal} // Close modal when clicking outside the image
+          style={{ zIndex: 1000 }}
+        >
+          <div className="relative">
+            <img
+              src={"/images/" + selectedImage.image}
+              className="object-contain max-h-[95vh] max-w-[95vw] rounded-2xl"
+              alt="Full View"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-2 right-2 text-white text-3xl font-bold"
+              onClick={closeModal} // Close modal on button click
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
