@@ -6,6 +6,11 @@ import { FaRegPaperPlane } from "react-icons/fa";
 import { BsEmojiWink } from "react-icons/bs";
 import { SiLiberadotchat } from "react-icons/si";
 import { TbPhotoQuestion } from "react-icons/tb";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { init } from "emoji-mart";
+
+init({ data });
 
 const MessageSend = ({
   text,
@@ -18,7 +23,12 @@ const MessageSend = ({
 }) => {
   const [subimtClass, SetSubmitClass] = useState("send-letter");
   const [trackImageState, setTrackImageState] = useState("hidden");
+  const [showPicker, setShowPicker] = useState(false);
 
+  const handleSelect = (emoji) => {
+    if (text) setText(text + emoji.native);
+    else setText(emoji.native);
+  };
   const handleInput = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -33,6 +43,7 @@ const MessageSend = ({
   };
   const handleSubmit = () => {
     if ((text && text.length) || imageToSend) {
+      setShowPicker(false);
       setTrackImageState("hidden");
       setTimeout(() => SetSubmitClass("send-letter"), 400);
       SetSubmitClass("send-letter send-letter-v2");
@@ -82,7 +93,10 @@ const MessageSend = ({
           <GoGift size={16} />
         </div>
         <div className="send-item">
-          <BsEmojiWink size={16} />
+          <BsEmojiWink size={16} onClick={() => setShowPicker(!showPicker)} />
+          <div className="z-10 absolute bottom-16">
+            {showPicker && <Picker data={data} onEmojiSelect={handleSelect} />}
+          </div>
         </div>
       </div>
       <div className="col-span-9 ">

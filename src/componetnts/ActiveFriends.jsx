@@ -21,7 +21,7 @@ const ActiveFriends = ({ actives }) => {
     }
   };
   return (
-    <div className="friend-active-list gap-1 px-2">
+    <div className="friend-active-list gap-1 p-2 px-2">
       {actives && actives.length ? (
         actives.map((active, index) => (
           <div

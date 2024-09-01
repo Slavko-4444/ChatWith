@@ -48,7 +48,7 @@ const FriendBlock = ({ friend, msgInfo }) => {
 
   return (
     <div
-      className="group p-2 border-y h-24 firend-element flex items-center hover:bg-slate-300 hover:cursor-pointer "
+      className="group p-2  border-b h-24 firend-element flex items-center hover:bg-slate-100 hover:cursor-pointer "
       onClick={toggleMessageContent}
     >
       <img
@@ -117,7 +117,7 @@ const FriendsList = () => {
   const friends = useRecoilValue(friendsListAtom);
 
   return (
-    <div className="mt-2 friend-list-all flex-1 overflow-y-auto">
+    <div className="mt-2 friend-list-all border-t flex-1 overflow-y-auto">
       {friends.length ? (
         friends.map((friend, index) => (
           <FriendBlock friend={friend} key={index} msgInfo={friend.msgInfo} />

@@ -34,3 +34,16 @@
   height: 2.7rem;
   background-color: rgb(0, 0, 197);
 }
+
+.emoji-mart {
+  --emoji-mart-background-color: rgb(85, 170, 255);
+  background-color: rgb(
+    85,
+    170,
+    255
+  ) !important; /* Fallback for older versions */
+}
+
+.emoji-mart-anchor {
+  background-color: rgb(85, 170, 255);
+}

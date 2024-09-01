@@ -5,6 +5,8 @@ import FriendsArea from "./FriendsArea";
 import ShortFriendInfo from "./ShortFriendInfo";
 import MessageSend from "./MessageSend";
 import MessageContent from "./MessageContent";
+import { RiArrowLeftWideFill } from "react-icons/ri";
+
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   activefriendsListAtom,
@@ -216,7 +218,7 @@ const Messenger = () => {
   const getClass = () => {
     return isChecked
       ? "absolute h-full top-0 pi border-l"
-      : "absolute h-full top-0 right-0 w-4/12  pi border-l";
+      : "absolute h-full top-0 right-0 w-4/12 pi border-l";
   };
 
   const handleCheck = () => {
@@ -298,10 +300,11 @@ const Messenger = () => {
   };
   return (
     <div className="h-screen w-full flex box-conent">
-      <div className="w-3/12 bg-white-800">
+      <div className="w-3/12 bg-white-800 flex flex-col">
         <FriendsArea />
       </div>
-      <div className="w-9/12 flex main-side">
+
+      <div className="w-9/12  flex main-side">
         <input
           type="checkbox"
           id="dot"
