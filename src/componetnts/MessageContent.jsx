@@ -70,6 +70,24 @@ const Message = ({
 };
 const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
   const currFriend = useRecoilValue(currentFriendAtom);
+  const [isWordAdded, setIsWordAdded] = useState(false);
+
+  useEffect(() => {
+    if (
+      typingMessage &&
+      typingMessage.cleanTypeDots === false &&
+      typingMessage.senderId === currFriend._id
+    ) {
+      if (!isWordAdded) {
+        setIsWordAdded(true);
+        scrollRef.current?.scrollIntoView({
+          block: "end",
+          inline: "nearest",
+        });
+      }
+    } else setIsWordAdded(false);
+  }, [typingMessage]);
+
   return (
     <div className="top-24 bottom-16  message-content">
       {message?.map((msg, index) => {
@@ -89,7 +107,6 @@ const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
           />
         );
       })}
-      {/* check this variable here */}
       {typingMessage &&
       typingMessage.cleanTypeDots === false &&
       typingMessage.senderId === currFriend._id ? (

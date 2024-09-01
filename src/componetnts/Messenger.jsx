@@ -300,7 +300,7 @@ const Messenger = () => {
   };
   return (
     <div className="h-screen w-full flex box-conent">
-      <div className="w-3/12 bg-white-800 flex flex-col">
+      <div className="w-3/12 bg-white-800">
         <FriendsArea />
       </div>
 

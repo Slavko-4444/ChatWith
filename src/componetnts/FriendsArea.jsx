@@ -37,7 +37,7 @@ const FriendsArea = () => {
   }, []);
 
   return (
-    <div className="w-full flex-grow flex flex-col border-r my_fr">
+    <div className="w-full h-full flex flex-col border-r my_fr">
       <UserInfo />
       <div className="h-12 px-2">
         <div>

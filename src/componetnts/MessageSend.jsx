@@ -9,6 +9,8 @@ import { TbPhotoQuestion } from "react-icons/tb";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { init } from "emoji-mart";
+import { validateImage } from "image-validator";
+import { toast } from "react-toastify";
 
 init({ data });
 
@@ -41,6 +43,15 @@ const MessageSend = ({
         cleanTypeDots: e.target.value.length ? false : true,
       });
   };
+
+  const updateImage = async (e) => {
+    if (e.target.files.length !== 0)
+      fileValidation(e.target.files[0]).then((res) => {
+        if (res) setImageToSend(e.target.files[0]);
+        else toast.error("Forwarded file is not image (or it's corrupted)!");
+      });
+  };
+
   const handleSubmit = () => {
     if ((text && text.length) || imageToSend) {
       setShowPicker(false);
@@ -51,17 +62,17 @@ const MessageSend = ({
     }
   };
 
-  const updateImage = async (e) => {
-    if (e.target.files.length !== 0) {
-      setImageToSend(e.target.files[0]);
-    }
-  };
-
   const handleTracking = () => {
     if (trackImageState !== "hidden") {
       setImageToSend(null);
       setTrackImageState("hidden");
     }
+  };
+
+  const fileValidation = async (file) => {
+    const isValidImage = await validateImage(file);
+    return isValidImage;
+    // expected output ==> true or false
   };
 
   useEffect(() => {

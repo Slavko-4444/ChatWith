@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "emoji-mart": "^5.6.0",
     "icons": "^1.0.0",
+    "image-validator": "^1.2.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",
