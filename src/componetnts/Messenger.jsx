@@ -5,7 +5,7 @@ import FriendsArea from "./FriendsArea";
 import ShortFriendInfo from "./ShortFriendInfo";
 import MessageSend from "./MessageSend";
 import MessageContent from "./MessageContent";
-import { RiArrowLeftWideFill } from "react-icons/ri";
+import controlImg from "../control.png";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -32,6 +32,7 @@ const Messenger = () => {
   const [typingMessage, setTypingMessage] = useState();
   const [imageToSend, setImageToSend] = useState();
   const decoded = jwtDecode(localStorage.getItem("authToken"));
+  const [open, setOpen] = useState(true);
 
   const currFriend = useRecoilValue(currentFriendAtom);
   const [currentFriends, setCurrentFrineds] = useRecoilState(
@@ -299,12 +300,27 @@ const Messenger = () => {
     });
   };
   return (
-    <div className="h-screen w-full flex box-conent">
-      <div className="w-3/12 bg-white-800">
-        <FriendsArea />
-      </div>
+    <div className="h-full w-full flex relative">
+      <FriendsArea open={open} setOpen={setOpen} />
 
-      <div className="w-9/12  flex main-side">
+      {/* button trigger for sidebar   */}
+      <img
+        src={controlImg}
+        alt="da vidimo"
+        className={`absolute cursor-pointer z-50 border-dark-purple
+          border-2 rounded-full  ${!open && "rotate-180"}
+          sm:invisible visible w-12 
+          duration-300 transition-[left]
+          top-9
+          
+       `}
+        onClick={() => setOpen(!open)}
+        style={{
+          left: open ? "calc(83.33% - 24px)" : "-1.3rem",
+        }}
+      />
+
+      <div className="h-screen flex flex-1">
         <input
           type="checkbox"
           id="dot"
@@ -312,7 +328,7 @@ const Messenger = () => {
           onChange={handleCheck}
         />
 
-        <div className="w-4/6 z-10 message-box">
+        <div className="w-full z-10 message-box relative">
           <ShortFriendInfo />
           <MessageContent
             message={message}
@@ -333,9 +349,9 @@ const Messenger = () => {
           />
         </div>
 
-        <div className={getClass()}>
+        {/* <div className={getClass()}>
           <FriendInfo />
-        </div>
+        </div> */}
       </div>
       {selectedImage.image && (
         <div

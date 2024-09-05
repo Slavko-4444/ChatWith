@@ -11,6 +11,7 @@ const ShortFriendInfo = () => {
 
   return (
     <div className="absolute flex justify-between items-center top-0 h-24 border border-l-0 px-5 top-message">
+      {/* // <div className="absolute flex justify-between items-center top-0 right-0 w-full border border-black"> */}
       <div className="flex items-center ">
         <img
           src={"/images/" + currFriend.image}

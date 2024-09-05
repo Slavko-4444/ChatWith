@@ -31,6 +31,8 @@ module.exports = {
           900: "#1c1917",
           950: "#0c0a09",
         },
+        "dark-purple": "#081A51",
+        "light-white": "rgba(255,255,255,0.17)",
       },
     },
     fontFamily: {
@@ -68,6 +70,11 @@ module.exports = {
         "Segoe UI Symbol",
         "Noto Color Emoji",
       ],
+    },
+    transitionProperty: {
+      width: "width",
+      left: "left",
+      right: "right",
     },
   },
   plugins: [],

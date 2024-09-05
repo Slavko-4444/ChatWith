@@ -26,7 +26,7 @@ function App() {
         transition={Bounce} // Ensure transition is correctly used here
         limit={3}
       />
-      <div className="md:h-screen content">
+      <div className="relative">
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Messenger />} />

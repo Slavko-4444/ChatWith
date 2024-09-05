@@ -3,6 +3,8 @@ import "../css/FriendsArea.css";
 import UserInfo from "./UserInfo";
 import ActiveFriends from "./ActiveFriends";
 import FriendsList from "./FriendsList";
+import controlImg from "../control.png";
+
 import {
   activefriendsListAtom,
   currentFriendAtom,
@@ -11,7 +13,7 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 
-const FriendsArea = () => {
+const FriendsArea = ({ open, setOpen }) => {
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const currentFriends = useRecoilValue(activefriendsListAtom);
@@ -37,9 +39,26 @@ const FriendsArea = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col border-r my_fr">
-      <UserInfo />
-      <div className="h-12 px-2">
+    <div
+      className={`
+      ${
+        open ? "sm:w-3/12 w-10/12" : "sm:w-28 w-0"
+      } bg-dark-purple transition-[width] h-screen sm:p-5 pt-8 duration-300
+       absolute sm:relative 
+      flex flex-col z-50
+    `}
+    >
+      <img
+        src={controlImg}
+        className={`absolute cursor-pointer sm:-right-3 sm:top-9 sm:w-7 z-50 border-dark-purple
+              border-2 rounded-full  ${!open && "rotate-180"}
+              sm:visible invisible
+           `}
+        onClick={() => setOpen(!open)}
+      />
+      <UserInfo open={open} />
+
+      <div className={`h-12 px-2 ${open ? "visible" : "invisible"}`}>
         <div>
           <label
             htmlFor="small-input"
@@ -48,14 +67,14 @@ const FriendsArea = () => {
           <input
             type="text"
             id="small-input"
-            className="block w-full p-2 text-gray-600 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="w-full p-2 text-gray-600 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search"
           />
         </div>
       </div>
-      <ActiveFriends actives={currentFriends} />
+      {/* <ActiveFriends actives={currentFriends} />
 
-      <FriendsList />
+      <FriendsList /> */}
     </div>
   );
 };

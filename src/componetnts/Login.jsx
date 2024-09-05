@@ -18,6 +18,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     const { email, password } = authForm;
 
     const formData = new FormData();

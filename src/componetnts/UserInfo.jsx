@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../css/UserInfo.css";
+import "../css/ActiveFriends.css";
 import { GrUserSettings } from "react-icons/gr";
 import { IoMdLogOut } from "react-icons/io";
 import { useRecoilState } from "recoil";
@@ -9,15 +9,16 @@ import LogOutModal from "./modals/LogOutModal";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { duration } from "moment/moment";
 
-const UserInfo = () => {
+const UserInfo = ({ open }) => {
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
   const [seeLogut, setSeeLogout] = useState(false);
 
   useEffect(() => {
-    if (!userInfo.token.length) {
+    if (!userInfo.token || !userInfo.token.length) {
       const tk = localStorage.getItem("authToken");
       const decoded = jwtDecode(tk);
       setUserInfo({
@@ -44,7 +45,7 @@ const UserInfo = () => {
   };
 
   return (
-    <div className="h-72 p-3 relative flex flex-col bg-slate-800 lg:h-24 md:flex-row   user-info-card">
+    <div className="flex flex-col pt-1 mb-1">
       {seeLogut ? (
         <LogOutModal
           toggleModal={toggleModal}
@@ -54,10 +55,21 @@ const UserInfo = () => {
       ) : (
         ""
       )}
-      <div className="">
-        <img src={userInfo.image} className="userinfo" alt="photo" />
+      <img
+        src={userInfo.image}
+        className="self-center cursor-pointer friend-image border border-white"
+        alt="photo"
+      />
+      <hr className={`my-2 ${open ? "invisible" : "visible delay-[225ms]"}`} />
+      <div
+        className={`text-2xl origin-left duration-200 ${
+          !open && "scale-0"
+        } text-white text-center capitalize mt-2`}
+      >
+        {userInfo.userName}
       </div>
-      <div className="text-2xl text-white  w-full flex justify-center items-center title-userinfo capitalize">
+
+      {/* <div className="text-2xl text-white  w-full flex justify-center items-center capitalize">
         {userInfo.userName}
       </div>
       <div className="flex flex-col justify-evenly w-12">
@@ -70,7 +82,7 @@ const UserInfo = () => {
         >
           <IoMdLogOut className="text-slate-800" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
