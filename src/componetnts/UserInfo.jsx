@@ -60,14 +60,16 @@ const UserInfo = ({ open }) => {
         className="self-center cursor-pointer friend-image border border-white"
         alt="photo"
       />
-      <hr className={`my-2 ${open ? "invisible" : "visible delay-[225ms]"}`} />
-      <div
-        className={`text-2xl origin-left duration-200 ${
-          !open && "scale-0"
+      <hr
+        className={`my-2 ${open ? "invisible" : "visible delay-[225ms]"} mx-2`}
+      />
+      <h1
+        className={`text-2xl origin-left  duration-200 ${
+          !open && "hidden duration-500"
         } text-white text-center capitalize mt-2`}
       >
         {userInfo.userName}
-      </div>
+      </h1>
 
       {/* <div className="text-2xl text-white  w-full flex justify-center items-center capitalize">
         {userInfo.userName}

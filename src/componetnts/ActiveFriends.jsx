@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
 import { userAtom } from "../recoil/atoms/userAtoms";
 
-const ActiveFriends = ({ actives }) => {
+const ActiveFriends = ({ actives, open }) => {
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const userData = useRecoilValue(userAtom);
 
@@ -21,7 +21,11 @@ const ActiveFriends = ({ actives }) => {
     }
   };
   return (
-    <div className="friend-active-list gap-1 p-2 px-2">
+    <div
+      className={`${!open && "p-0 px-0 mb-2"}
+      ${!open && actives && actives.length === 1 && "flex justify-center"}
+       origin-left duration-300 friend-active-list gap-1 p-2 mx-2`}
+    >
       {actives && actives.length ? (
         actives.map((active, index) => (
           <div
