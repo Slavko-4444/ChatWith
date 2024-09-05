@@ -24,7 +24,7 @@ const ActiveFriends = ({ actives, open }) => {
     <div
       className={`${!open && "p-0 px-0 mb-2"}
       ${!open && actives && actives.length === 1 && "flex justify-center"}
-       origin-left duration-300 friend-active-list gap-1 p-2 mx-2`}
+       origin-left duration-300 friend-active-list gap-1 p-2 mx-1`}
     >
       {actives && actives.length ? (
         actives.map((active, index) => (

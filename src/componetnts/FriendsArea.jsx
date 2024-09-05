@@ -41,10 +41,10 @@ const FriendsArea = ({ open, setOpen }) => {
   return (
     <div
       className={`
-      bg-dark-purple transition-[width] h-screen px-5 pt-4 duration-300
+      bg-dark-purple transition-[width] h-screen  pt-4 duration-300
        absolute sm:relative 
       flex flex-col z-50
-       ${open ? "sm:w-3/12 w-10/12" : "sm:w-28 w-0 px-0"}
+       ${open ? "sm:w-3/12 w-10/12 px-5" : "sm:w-28 w-0"}
     `}
     >
       <img
