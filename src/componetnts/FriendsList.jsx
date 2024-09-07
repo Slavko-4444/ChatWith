@@ -85,7 +85,7 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
             )}
           </p>
           {msgInfo ? (
-            <p
+            <div
               className={`${
                 !open && "hidden"
               } text-slate-400 group-hover:text-slate-200 flex items-center sm:flex-col md:flex-col md:text-base lg:flex-row`}
@@ -123,7 +123,7 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
               ) : (
                 ""
               )}
-            </p>
+            </div>
           ) : (
             ""
           )}
@@ -139,18 +139,6 @@ const FriendsList = ({ open }) => {
 
   return (
     <div className="mt-5 friend-list-all flex-1 overflow-y-auto">
-      {friends.length ? (
-        friends.map((friend, index) => (
-          <FriendBlock
-            friend={friend}
-            key={index}
-            msgInfo={friend.msgInfo}
-            open={open}
-          />
-        ))
-      ) : (
-        <p className="text-sm md:text-3xl p-2">No friends found</p>
-      )}
       {friends.length ? (
         friends.map((friend, index) => (
           <FriendBlock

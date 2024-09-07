@@ -25,6 +25,8 @@ import {
 import sendingSound from "../audio/message-sending.mp3";
 import receivingSound from "../audio/sending2.mp3";
 import useSound from "use-sound";
+import LogOutModal from "./modals/LogOutModal";
+import { LogOutAtom } from "../recoil/atoms/customAtoms";
 
 const Messenger = () => {
   const scrollRef = useRef();
@@ -38,6 +40,7 @@ const Messenger = () => {
   const [currentFriends, setCurrentFrineds] = useRecoilState(
     activefriendsListAtom
   );
+  const seeLogut = useRecoilValue(LogOutAtom);
 
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -302,6 +305,8 @@ const Messenger = () => {
   return (
     <div className="h-full w-full flex relative">
       <FriendsArea open={open} setOpen={setOpen} />
+      {/* loging out modal */}
+      {seeLogut && <LogOutModal />}
 
       {/* button trigger for sidebar   */}
       <img
@@ -319,14 +324,12 @@ const Messenger = () => {
           left: open ? "calc(83.33% - 24px)" : "-1.3rem",
         }}
       />
-
       <div
         className={`${
           open ? "visible sm:invisible" : "invisible"
         } absolute z-40 inset-0 bg-black bg-opacity-50 shadow-lg`}
         onClick={() => setOpen(!open)}
       ></div>
-
       <div className="h-screen flex flex-1">
         <input
           type="checkbox"

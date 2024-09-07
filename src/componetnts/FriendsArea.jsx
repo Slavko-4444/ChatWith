@@ -23,7 +23,6 @@ const FriendsArea = ({ open, setOpen }) => {
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const currentFriends = useRecoilValue(activefriendsListAtom);
   const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -64,7 +63,6 @@ const FriendsArea = ({ open, setOpen }) => {
         onClick={() => setOpen(!open)}
       />
       <UserInfo open={open} />
-
       <div className={`h-12 px-2 ${open ? "visible" : "hidden"}`}>
         <div>
           <label
@@ -80,7 +78,6 @@ const FriendsArea = ({ open, setOpen }) => {
         </div>
       </div>
       <ActiveFriends actives={currentFriends} open={open} />
-
       <h1
         className={`sm:text-3xl md:text-4xl text-2xl origin-left font-bold duration-200 ${
           !open && "hidden duration-500"
@@ -88,7 +85,6 @@ const FriendsArea = ({ open, setOpen }) => {
       >
         All Friends
       </h1>
-
       <div
         className={`flex flex-col justify-center text-4xl text-white text-center my-2 ${
           open ? "hidden" : "invisible sm:visible delay-[225ms]"
@@ -99,12 +95,10 @@ const FriendsArea = ({ open, setOpen }) => {
           <IoIosArrowDown size={"2rem"} />
         </div>
       </div>
-
       <FriendsList open={open} />
-
       <div
         className={` ${
-          !open && "hidden"
+          !open && "hidden sm:flex"
         } absolute z-[50] bottom-0 rounded-[10%] w-full h-16 left-0 right-0 bg-dark-purple flex justify-center items-center`}
       >
         <HiOutlineLogin

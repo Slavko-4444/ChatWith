@@ -1,6 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { LogOutAtom } from "../../recoil/atoms/customAtoms";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { userAtom } from "../../recoil/atoms/userAtoms";
 
-const LogOutModal = ({ toggleModal, seeLogut, handleLogout }) => {
+const LogOutModal = () => {
+  // log-out logic...
+  const navigate = useNavigate();
+  const toggleModal = () => setSeeLogout(!seeLogut);
+  const [userInfo, setUserInfo] = useRecoilState(userAtom);
+
+  const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
+
+  const handleLogout = () => {
+    setUserInfo({ token: "" });
+    localStorage.removeItem("authToken");
+    Cookies.remove("authToken");
+    navigate("/login");
+    toast.success("See you!");
+  };
+
   if (!seeLogut) return null;
 
   return (
@@ -8,7 +29,7 @@ const LogOutModal = ({ toggleModal, seeLogut, handleLogout }) => {
       <div
         id="popup-modal"
         tabIndex="-1"
-        className="fixed top-0 right-0 left-0 z-[50] flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden"
+        className="fixed bg-black bg-opacity-50 z-[500] top-0 right-0 left-0 flex justify-center items-center w-full md:inset-0 h-full max-h-full overflow-y-auto overflow-x-hidden"
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">

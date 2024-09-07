@@ -14,29 +14,9 @@ import { LogOutAtom } from "./recoil/atoms/customAtoms";
 import LogOutModal from "./componetnts/modals/LogOutModal";
 
 function App() {
-  const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
-
-  // log-out logic...
-  const toggleModal = () => setSeeLogout(!seeLogut);
-
-  const handleLogout = () => {
-    setUserInfo({ token: "" });
-    localStorage.removeItem("authToken");
-    Cookies.remove("authToken");
-    navigate("/login");
-    toast.success("See you!");
-  };
-
   return (
     <div className="App relative">
       {/* extra calling */}
-      {seeLogut && (
-        <LogOutModal
-          toggleModal={toggleModal}
-          seeLogut={seeLogut}
-          handleLogout={handleLogout}
-        />
-      )}
       <ToastContainer
         position="top-right"
         autoClose={2000}
