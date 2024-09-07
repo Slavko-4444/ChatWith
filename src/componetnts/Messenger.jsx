@@ -320,6 +320,13 @@ const Messenger = () => {
         }}
       />
 
+      <div
+        className={`${
+          open ? "visible sm:invisible" : "invisible"
+        } absolute z-40 inset-0 bg-black bg-opacity-50 shadow-lg`}
+        onClick={() => setOpen(!open)}
+      ></div>
+
       <div className="h-screen flex flex-1">
         <input
           type="checkbox"

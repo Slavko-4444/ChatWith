@@ -5,17 +5,12 @@ import { IoMdLogOut } from "react-icons/io";
 import { useRecoilState } from "recoil";
 import { userAtom } from "../recoil/atoms/userAtoms";
 import { jwtDecode } from "jwt-decode";
-import LogOutModal from "./modals/LogOutModal";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { duration } from "moment/moment";
 
 const UserInfo = ({ open }) => {
-  const navigate = useNavigate();
-
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
-  const [seeLogut, setSeeLogout] = useState(false);
 
   useEffect(() => {
     if (!userInfo.token || !userInfo.token.length) {
@@ -34,27 +29,8 @@ const UserInfo = ({ open }) => {
 
   useEffect(() => {}, [userInfo, userInfo]);
 
-  const toggleModal = () => setSeeLogout(!seeLogut);
-
-  const handleLogout = () => {
-    setUserInfo({ token: "" });
-    localStorage.removeItem("authToken");
-    Cookies.remove("authToken");
-    navigate("/login");
-    toast.success("See you!");
-  };
-
   return (
     <div className="flex flex-col pt-1 mb-1">
-      {seeLogut ? (
-        <LogOutModal
-          toggleModal={toggleModal}
-          seeLogut={seeLogut}
-          handleLogout={handleLogout}
-        />
-      ) : (
-        ""
-      )}
       <img
         src={userInfo.image}
         className="self-center cursor-pointer friend-image border border-white"

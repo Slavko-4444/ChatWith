@@ -4,6 +4,9 @@ import UserInfo from "./UserInfo";
 import ActiveFriends from "./ActiveFriends";
 import FriendsList from "./FriendsList";
 import controlImg from "../control.png";
+import { IoIosArrowDown } from "react-icons/io";
+import { HiOutlineLogin } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 import {
   activefriendsListAtom,
@@ -12,11 +15,15 @@ import {
 } from "../recoil/atoms/friendsAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
+import LogOutModal from "./modals/LogOutModal";
+import { LogOutAtom } from "../recoil/atoms/customAtoms";
 
 const FriendsArea = ({ open, setOpen }) => {
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const currentFriends = useRecoilValue(activefriendsListAtom);
+  const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +44,7 @@ const FriendsArea = ({ open, setOpen }) => {
 
     fetchData();
   }, []);
+  const toggleModal = () => setSeeLogout(!seeLogut);
 
   return (
     <div
@@ -72,8 +80,39 @@ const FriendsArea = ({ open, setOpen }) => {
         </div>
       </div>
       <ActiveFriends actives={currentFriends} open={open} />
-      {/* 
-      <FriendsList /> */}
+
+      <h1
+        className={`sm:text-3xl md:text-4xl text-2xl origin-left font-bold duration-200 ${
+          !open && "hidden duration-500"
+        } text-white text-center capitalize mt-2`}
+      >
+        All Friends
+      </h1>
+
+      <div
+        className={`flex flex-col justify-center text-4xl text-white text-center my-2 ${
+          open ? "hidden" : "invisible sm:visible delay-[225ms]"
+        } mx-2`}
+      >
+        <span className="block">Fr</span>
+        <div className="flex justify-center">
+          <IoIosArrowDown size={"2rem"} />
+        </div>
+      </div>
+
+      <FriendsList open={open} />
+
+      <div
+        className={` ${
+          !open && "hidden"
+        } absolute z-[50] bottom-0 rounded-[10%] w-full h-16 left-0 right-0 bg-dark-purple flex justify-center items-center`}
+      >
+        <HiOutlineLogin
+          className="text-white hover:size-11 hover:cursor-pointer"
+          size={"2.3rem"}
+          onClick={toggleModal}
+        />
+      </div>
     </div>
   );
 };

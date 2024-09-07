@@ -9,10 +9,34 @@ import "./css/App.css";
 import { Route, Routes } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import ProtectedRoute from "./componetnts/ProtectedRoute";
+import { useRecoilState } from "recoil";
+import { LogOutAtom } from "./recoil/atoms/customAtoms";
+import LogOutModal from "./componetnts/modals/LogOutModal";
 
 function App() {
+  const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
+
+  // log-out logic...
+  const toggleModal = () => setSeeLogout(!seeLogut);
+
+  const handleLogout = () => {
+    setUserInfo({ token: "" });
+    localStorage.removeItem("authToken");
+    Cookies.remove("authToken");
+    navigate("/login");
+    toast.success("See you!");
+  };
+
   return (
-    <div className="App">
+    <div className="App relative">
+      {/* extra calling */}
+      {seeLogut && (
+        <LogOutModal
+          toggleModal={toggleModal}
+          seeLogut={seeLogut}
+          handleLogout={handleLogout}
+        />
+      )}
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -26,6 +50,7 @@ function App() {
         transition={Bounce} // Ensure transition is correctly used here
         limit={3}
       />
+      {/* main content of the app */}
       <div className="relative">
         <Routes>
           <Route element={<ProtectedRoute />}>
