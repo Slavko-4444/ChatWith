@@ -304,7 +304,7 @@ const Messenger = () => {
       {/* loging out modal */}
       {seeLogut && <LogOutModal />}
 
-      {/* button trigger for sidebar */}
+      {/* button trigger for left sidebar */}
       <img
         src={controlImg}
         alt="da vidimo"
@@ -312,7 +312,7 @@ const Messenger = () => {
           border-2 rounded-full  ${!open && "rotate-180"}
           sm:invisible visible w-12 
           duration-300 transition-[left]
-          top-9
+          top-[4.5rem]
           
        `}
         onClick={() => setOpen(!open)}

@@ -95,7 +95,7 @@ const FriendBlock = ({ friend, msgInfo }) => {
             <div
               className={`${
                 !open && "hidden"
-              } text-slate-400 transition delay-500 group-hover:text-slate-200 flex items-center sm:flex-col md:flex-col md:text-base lg:flex-row`}
+              } text-slate-400 transition-[width,opacity,visibility] duration-500 group-hover:text-slate-200 flex items-center sm:flex-col md:flex-col md:text-base lg:flex-row`}
             >
               {msgInfo.senderId === friend._id
                 ? msgInfo.senderName.split(" ")[0] + ": "

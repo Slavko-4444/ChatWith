@@ -48,15 +48,15 @@ const FriendsArea = () => {
   return (
     <div
       className={`
-      bg-dark-purple transition-[width] h-screen  pt-4 duration-300
+      bg-dark-purple transition-[width, padding] h-screen  pt-4 duration-300
        absolute sm:relative 
       flex flex-col z-50
-       ${open ? "sm:w-3/12 w-10/12 px-5" : "sm:w-28 w-0"}
+       ${open ? "sm:w-3/12 w-10/12 px-5" : "sm:w-28 w-0 px-0"}
     `}
     >
       <img
         src={controlImg}
-        className={`absolute cursor-pointer sm:-right-3 sm:top-9 sm:w-7 z-50 border-dark-purple
+        className={`absolute cursor-pointer sm:-right-3 sm:top-[calc(6rem-0.875rem)] sm:w-7 z-50 border-dark-purple
               border-2 rounded-full  ${!open && "rotate-180"}
               sm:visible invisible
            `}
@@ -65,30 +65,29 @@ const FriendsArea = () => {
       <UserInfo />
       <div
         className={`h-12 ${
-          open ? "px-2" : "px-0 hidden"
-        } transform duration-300`}
+          open ? "px-2" : "sm:hidden"
+        }  transition-[padding] duration-300`}
       >
         <div>
           <label
             htmlFor="small-input"
-            className={`${
-              open ? "mb-2" : "mb-0"
-            } block text-sm font-medium text-gray-900 dark:text-white`}
+            className="mb-2 transition duration-300 block text-sm font-medium text-gray-900 dark:text-white"
           ></label>
           <input
             type="text"
             id="small-input"
-            className={`w-full ${
-              open ? "p-2 border" : "p-0 scale-0"
-            } text-gray-600 transform duration-300 border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+            className={`${
+              open ? "p-2" : "p-0"
+            } w-full text-gray-600 transition-[padding] duration-300 border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
             placeholder="Search"
           />
         </div>
       </div>
       <ActiveFriends actives={currentFriends} />
+
       <h1
-        className={`sm:text-3xl md:text-4xl text-2xl origin-left font-bold duration-200 ${
-          !open && "hidden duration-500"
+        className={`origin-center transition duration-300 sm:text-3xl md:text-4xl  text-2xl font-bold ${
+          !open && "scale-0 sm:hidden"
         } text-white text-center capitalize mt-2`}
       >
         All Friends

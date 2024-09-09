@@ -28,7 +28,11 @@ const UserInfo = () => {
   useEffect(() => {}, [userInfo, userInfo]);
 
   return (
-    <div className="flex flex-col pt-1 mb-1">
+    <div
+      className={`${
+        !open && "scale-0 sm:scale-100"
+      } origin-left duration-300 flex flex-col pt-1 mb-1`}
+    >
       <img
         src={userInfo.image}
         className="self-center cursor-pointer friend-image border border-white"
@@ -39,7 +43,7 @@ const UserInfo = () => {
       />
       <h1
         className={`text-2xl origin-center duration-300 ${
-          !open && "hidden"
+          !open && "scale-0 sm:hidden"
         } text-white text-center capitalize mt-2`}
       >
         {userInfo.userName}
