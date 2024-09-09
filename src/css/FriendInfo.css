@@ -1,10 +1,5 @@
 .image-friend {
   position: relative;
-  /* width: 100%;
-  background-image: url("/images/mica.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center; */
 }
 .image-friend::before {
   content: "";
