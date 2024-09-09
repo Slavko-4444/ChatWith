@@ -3,8 +3,10 @@ import "../css/ActiveFriends.css";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
 import { userAtom } from "../recoil/atoms/userAtoms";
+import { IsOpenAtom } from "../recoil/atoms/customAtoms";
 
-const ActiveFriends = ({ actives, open }) => {
+const ActiveFriends = ({ actives }) => {
+  const [open, setOpen] = useRecoilState(IsOpenAtom);
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const userData = useRecoilValue(userAtom);
 
@@ -12,6 +14,7 @@ const ActiveFriends = ({ actives, open }) => {
     // we cannot chat with ourselves
     if (usr.id !== userData.id) {
       const imageName = usr.userData.image.split("/").pop();
+      setOpen(false);
       setCurrFriend({
         _id: usr.id,
         image: imageName,

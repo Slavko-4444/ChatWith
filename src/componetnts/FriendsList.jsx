@@ -10,8 +10,10 @@ import { NotificationOfCommingMessageAtom } from "../recoil/atoms/notificationAt
 import useSound from "use-sound";
 import notificationSound from "../audio/notification.mp3";
 import { FiCheck } from "react-icons/fi";
+import { IsOpenAtom } from "../recoil/atoms/customAtoms";
 
-const FriendBlock = ({ friend, msgInfo, open }) => {
+const FriendBlock = ({ friend, msgInfo }) => {
+  const [open, setOpen] = useRecoilState(IsOpenAtom);
   const [notificationMessage, setNotificationMessage] = useRecoilState(
     NotificationOfCommingMessageAtom
   );
@@ -31,6 +33,7 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
   }, [notificationMessage]);
 
   const toggleMessageContent = () => {
+    setOpen(false);
     setCurrFriend({
       userName: friend.userName,
       email: friend.email,
@@ -71,7 +74,11 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
           className="friend-image f-i"
           alt="opa"
         />
-        <div className={`${!open && "hidden"} flex ml-3 flex-col`}>
+        <div
+          className={`${
+            !open && "hidden"
+          } flex ml-3 flex-col transition delay-500`}
+        >
           <p className="font-semibold lg:text-xl text-sm text-teal-100 capitalize flex">
             {friend.userName}
             {hasUnreadMessage ? (
@@ -88,7 +95,7 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
             <div
               className={`${
                 !open && "hidden"
-              } text-slate-400 group-hover:text-slate-200 flex items-center sm:flex-col md:flex-col md:text-base lg:flex-row`}
+              } text-slate-400 transition delay-500 group-hover:text-slate-200 flex items-center sm:flex-col md:flex-col md:text-base lg:flex-row`}
             >
               {msgInfo.senderId === friend._id
                 ? msgInfo.senderName.split(" ")[0] + ": "
@@ -134,19 +141,14 @@ const FriendBlock = ({ friend, msgInfo, open }) => {
   );
 };
 
-const FriendsList = ({ open }) => {
+const FriendsList = () => {
   const friends = useRecoilValue(friendsListAtom);
 
   return (
     <div className="mt-5 friend-list-all flex-1 overflow-y-auto">
       {friends.length ? (
         friends.map((friend, index) => (
-          <FriendBlock
-            friend={friend}
-            key={index}
-            msgInfo={friend.msgInfo}
-            open={open}
-          />
+          <FriendBlock friend={friend} key={index} msgInfo={friend.msgInfo} />
         ))
       ) : (
         <p className="text-sm md:text-3xl p-2">No friends found</p>

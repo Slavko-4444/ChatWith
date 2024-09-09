@@ -16,9 +16,10 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import LogOutModal from "./modals/LogOutModal";
-import { LogOutAtom } from "../recoil/atoms/customAtoms";
+import { IsOpenAtom, LogOutAtom } from "../recoil/atoms/customAtoms";
 
-const FriendsArea = ({ open, setOpen }) => {
+const FriendsArea = () => {
+  const [open, setOpen] = useRecoilState(IsOpenAtom);
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const [friends, setFriends] = useRecoilState(friendsListAtom);
   const currentFriends = useRecoilValue(activefriendsListAtom);
@@ -44,7 +45,6 @@ const FriendsArea = ({ open, setOpen }) => {
     fetchData();
   }, []);
   const toggleModal = () => setSeeLogout(!seeLogut);
-
   return (
     <div
       className={`
@@ -62,22 +62,30 @@ const FriendsArea = ({ open, setOpen }) => {
            `}
         onClick={() => setOpen(!open)}
       />
-      <UserInfo open={open} />
-      <div className={`h-12 px-2 ${open ? "visible" : "hidden"}`}>
+      <UserInfo />
+      <div
+        className={`h-12 ${
+          open ? "px-2" : "px-0 hidden"
+        } transform duration-300`}
+      >
         <div>
           <label
             htmlFor="small-input"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className={`${
+              open ? "mb-2" : "mb-0"
+            } block text-sm font-medium text-gray-900 dark:text-white`}
           ></label>
           <input
             type="text"
             id="small-input"
-            className="w-full p-2 text-gray-600 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className={`w-full ${
+              open ? "p-2 border" : "p-0 scale-0"
+            } text-gray-600 transform duration-300 border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
             placeholder="Search"
           />
         </div>
       </div>
-      <ActiveFriends actives={currentFriends} open={open} />
+      <ActiveFriends actives={currentFriends} />
       <h1
         className={`sm:text-3xl md:text-4xl text-2xl origin-left font-bold duration-200 ${
           !open && "hidden duration-500"
@@ -95,7 +103,7 @@ const FriendsArea = ({ open, setOpen }) => {
           <IoIosArrowDown size={"2rem"} />
         </div>
       </div>
-      <FriendsList open={open} />
+      <FriendsList />
       <div
         className={` ${
           !open && "hidden sm:flex"

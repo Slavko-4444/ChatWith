@@ -26,7 +26,7 @@ import sendingSound from "../audio/message-sending.mp3";
 import receivingSound from "../audio/sending2.mp3";
 import useSound from "use-sound";
 import LogOutModal from "./modals/LogOutModal";
-import { LogOutAtom } from "../recoil/atoms/customAtoms";
+import { IsOpenAtom, LogOutAtom } from "../recoil/atoms/customAtoms";
 
 const Messenger = () => {
   const scrollRef = useRef();
@@ -34,7 +34,7 @@ const Messenger = () => {
   const [typingMessage, setTypingMessage] = useState();
   const [imageToSend, setImageToSend] = useState();
   const decoded = jwtDecode(localStorage.getItem("authToken"));
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useRecoilState(IsOpenAtom);
 
   const currFriend = useRecoilValue(currentFriendAtom);
   const [currentFriends, setCurrentFrineds] = useRecoilState(
@@ -219,12 +219,6 @@ const Messenger = () => {
     });
   }, [message]);
 
-  const getClass = () => {
-    return isChecked
-      ? "absolute h-full top-0 pi border-l"
-      : "absolute h-full top-0 right-0 w-4/12 pi border-l";
-  };
-
   const handleCheck = () => {
     setIsChecked(!isChecked);
   };
@@ -303,12 +297,14 @@ const Messenger = () => {
     });
   };
   return (
-    <div className="h-full w-full flex relative">
-      <FriendsArea open={open} setOpen={setOpen} />
+    <div className="h-full w-full flex relative overflow-hidden">
+      {/* left sidebar */}
+      <FriendsArea />
+
       {/* loging out modal */}
       {seeLogut && <LogOutModal />}
 
-      {/* button trigger for sidebar   */}
+      {/* button trigger for sidebar */}
       <img
         src={controlImg}
         alt="da vidimo"
@@ -324,12 +320,23 @@ const Messenger = () => {
           left: open ? "calc(83.33% - 24px)" : "-1.3rem",
         }}
       />
+
+      {/* shadow div for small screen when our left sidebar is open */}
       <div
         className={`${
           open ? "visible sm:invisible" : "invisible"
         } absolute z-40 inset-0 bg-black bg-opacity-50 shadow-lg`}
         onClick={() => setOpen(!open)}
       ></div>
+      {/* shadow div for small screen when our right sidebar is open */}
+      <div
+        className={`${
+          isChecked ? "visible lg:invisible" : "invisible"
+        } absolute z-[50] inset-0 bg-black bg-opacity-50 shadow-lg`}
+        onClick={() => setIsChecked(!isChecked)}
+      ></div>
+
+      {/* message content */}
       <div className="h-screen flex flex-1">
         <input
           type="checkbox"
@@ -358,11 +365,24 @@ const Messenger = () => {
             setImageToSend={setImageToSend}
           />
         </div>
-
-        {/* <div className={getClass()}>
-          <FriendInfo />
-        </div> */}
       </div>
+
+      {/* right side bar for friend-info */}
+      <div
+        className={`${
+          isChecked ? "lg:w-[25vw]" : "lg:w-0"
+        } lg:duration-500 lg:relative lg:visible invisible`}
+      ></div>
+
+      <div
+        className={`${
+          isChecked && "lg:-translate-x-[25vw] lg:border-l -translate-x-[83vw]"
+        } transform transition-transform duration-500 bg-white lg:-right-[25vw] z-[55] ease-in-out absolute lg:w-[25vw] w-[83vw] h-full -right-[83vw]`}
+      >
+        <FriendInfo />
+      </div>
+
+      {/* modal for images pop-up */}
       {selectedImage.image && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"

@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import "../css/ActiveFriends.css";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userAtom } from "../recoil/atoms/userAtoms";
 import { jwtDecode } from "jwt-decode";
+import { IsOpenAtom } from "../recoil/atoms/customAtoms";
 
-const UserInfo = ({ open }) => {
+const UserInfo = () => {
+  const open = useRecoilValue(IsOpenAtom);
+
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
 
   useEffect(() => {
@@ -35,8 +38,8 @@ const UserInfo = ({ open }) => {
         className={`my-2 ${open ? "invisible" : "visible delay-[225ms]"} mx-2`}
       />
       <h1
-        className={`text-2xl origin-left  duration-200 ${
-          !open && "hidden duration-500"
+        className={`text-2xl origin-center duration-300 ${
+          !open && "hidden"
         } text-white text-center capitalize mt-2`}
       >
         {userInfo.userName}
