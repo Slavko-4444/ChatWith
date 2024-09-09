@@ -331,7 +331,7 @@ const Messenger = () => {
       {/* shadow div for small screen when our right sidebar is open */}
       <div
         className={`${
-          isChecked ? "visible lg:invisible" : "invisible"
+          isChecked ? "visible md:invisible" : "invisible"
         } absolute z-[50] inset-0 bg-black bg-opacity-50 shadow-lg`}
         onClick={() => setIsChecked(!isChecked)}
       ></div>
@@ -370,14 +370,14 @@ const Messenger = () => {
       {/* right side bar for friend-info */}
       <div
         className={`${
-          isChecked ? "lg:w-[25vw]" : "lg:w-0"
-        } lg:duration-500 lg:relative lg:visible invisible`}
+          isChecked ? "md:w-[25vw]" : "md:w-0"
+        } md:duration-500 md:relative md:visible invisible`}
       ></div>
 
       <div
         className={`${
-          isChecked && "lg:-translate-x-[25vw] lg:border-l -translate-x-[83vw]"
-        } transform transition-transform duration-500 bg-white lg:-right-[25vw] z-[55] ease-in-out absolute lg:w-[25vw] w-[83vw] h-full -right-[83vw]`}
+          isChecked && "md:-translate-x-[25vw] md:border-l -translate-x-[83vw]"
+        } transform transition-transform duration-500 bg-white md:-right-[25vw] z-[55] ease-in-out absolute md:w-[25vw] w-[83vw] h-full -right-[83vw]`}
       >
         <FriendInfo />
       </div>

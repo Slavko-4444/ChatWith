@@ -47,12 +47,12 @@ const ImagesData = () => {
   };
 
   return (
-    <div className="data-show m-4 h-auto relative rounded overflow-y-auto grid grid-cols-1 xl:grid-cols-2">
+    <div className="flex-1 data-show m-4 h-auto relative rounded overflow-y-auto grid grid-cols-1 2xl:grid-cols-2">
       {chatImages.map((imgData, key) => (
-        <div className="" key={key}>
+        <div key={key}>
           <img
             src={"/images/" + imgData.image}
-            className="object-fill h-48 w-full rounded-2xl p-1 hover:cursor-pointer"
+            className="object-fill h-72 sm:h-96 xl:h-64 w-full rounded-2xl p-1 hover:cursor-pointer"
             alt="opa"
             onClick={() => handleImageClick(imgData)}
           />
@@ -99,7 +99,7 @@ const FriendInfo = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-1 flex-col">
       <div className="relative h-96 w-full overflow-hidden image-friend">
         <img
           src={"/images/" + currFriend.image}
@@ -107,7 +107,7 @@ const FriendInfo = () => {
           alt="image-profile"
         />
       </div>
-      <div className="m-4 p-1 border border-x-0 h-14  transition-all">
+      <div className="m-4 p-1 h-14  transition-all">
         <p className="text-center text-xl capitalize">{currFriend.userName}</p>
         <p
           className={
@@ -119,24 +119,24 @@ const FriendInfo = () => {
           {isActive === true ? "Active" : "Ofline"}
         </p>
       </div>
-      <div className="p-2 m-4 h-28 xl:h-14  grid grid-row grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="p-2 pt-4 m-3 border-t grid grid-row grid-cols-1 xl:grid-cols-3 gap-4">
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
+          className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("images")}
         >
           # images
         </div>
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
+          className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("links")}
         >
           # links
         </div>
         <div
-          className="border flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
+          className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("chatInfo")}
         >
-          <p># chat info</p>
+          <p className="text-center"># chat info</p>
         </div>
       </div>
       {clickItems.images ? <ImagesData /> : ""}
