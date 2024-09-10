@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/MessageContent.css";
 import { currentFriendAtom } from "../recoil/atoms/friendsAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { PiEyeClosedDuotone } from "react-icons/pi";
+import { VscEyeClosed } from "react-icons/vsc";
 import { PiEyeBold } from "react-icons/pi";
 import { SelectedImageAtom } from "../recoil/atoms/notificationAtoms";
 
@@ -35,13 +35,13 @@ const Message = ({
       senderName: senderName,
     });
   };
-
+  console.log("first", messageId, image, status);
   return (
-    <div ref={scrollRef} className={`message ${type}`}>
+    <div ref={scrollRef} className={`message ${type} max-w-[90%]`}>
       {image ? (
         <img
           src={`/images/${image}`}
-          className="h-80 w-96 hover:cursor-pointer rounded"
+          className="max-h-80 w-full h-auto  max-w-96 2xl:max-w-[26rem] 2xl:max-h-96 object-contain hover:cursor-pointer rounded"
           onClick={handleImageClick}
         />
       ) : (
@@ -52,7 +52,7 @@ const Message = ({
         {type === "sending" ? (
           <>
             {status && status === "unseen" ? (
-              <PiEyeClosedDuotone className="size-5 text-slate-500 mr-2" />
+              <VscEyeClosed className="size-5 text-slate-500 mr-2" />
             ) : (
               <PiEyeBold className="size-5 text-slate-500 mr-2" />
             )}

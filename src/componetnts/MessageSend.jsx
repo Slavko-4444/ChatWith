@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../css/MessageSend.css";
 import { FaRegImage } from "react-icons/fa6";
 import { GoGift } from "react-icons/go";
@@ -23,9 +23,9 @@ const MessageSend = ({
   setImageToSend,
   imageToSend,
 }) => {
-  const [subimtClass, SetSubmitClass] = useState("send-letter");
   const [trackImageState, setTrackImageState] = useState("hidden");
   const [showPicker, setShowPicker] = useState(false);
+  const textareaRef = useRef(null);
 
   const handleSelect = (emoji) => {
     if (text) setText(text + emoji.native);
@@ -56,8 +56,6 @@ const MessageSend = ({
     if ((text && text.length) || imageToSend) {
       setShowPicker(false);
       setTrackImageState("hidden");
-      setTimeout(() => SetSubmitClass("send-letter"), 400);
-      SetSubmitClass("send-letter send-letter-v2");
       sendMessage();
     }
   };
@@ -81,52 +79,99 @@ const MessageSend = ({
         "absolute -top-52 z-10 left-1/2 transform -translate-x-1/2 inline-flex justify-center hover:cursor-pointer items-center rounded-full bg-red-400 p-4 animate-pop-up"
       );
   }, [imageToSend]);
+
+  // event listener for focusing on input area...
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === "k") {
+        event.preventDefault();
+        textareaRef.current.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // Checks is the enter key pressed...
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && event.ctrlKey) {
+      event.preventDefault();
+      let newText = "\n";
+      if (text) newText = text + "\n";
+      setText(newText);
+    } else if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
+      // Trigger form submit on Enter (without Ctrl or Shift)
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="absolute bottom-0 h-16 bg-slate-50 border-y message-send px-5 grid items-center grid-row grid-cols-12">
+    <div className="absolute flex bottom-0 h-16 bg-slate-50 border-y message-send pr-5 items-center">
+      {/* button animation */}
       <div className={trackImageState} onClick={handleTracking}>
         <TbPhotoQuestion className="text-white text-4xl" />
       </div>
 
-      <div className="col-span-2 flex">
-        <div className="send-item">
+      {/* div buttons */}
+      <div className="flex w-28">
+        {/* 1. image button div */}
+        <div className="send-item w-11 h-10 rounded-[50%] m-1">
           <input
             onChange={updateImage}
             type="file"
             id="pic"
-            className="form-control hidden"
+            className="hidden"
           />
           <label htmlFor="pic" className="hover:cursor-pointer">
             {" "}
             <FaRegImage size={16} />{" "}
           </label>
         </div>
-        <div className="send-item">
-          <GoGift size={16} />
-        </div>
-        <div className="send-item">
+        {/* 2. emojis button div */}
+        <div className="send-item w-11 h-10 rounded-[50%] m-1">
           <BsEmojiWink size={16} onClick={() => setShowPicker(!showPicker)} />
           <div className="z-10 absolute bottom-16">
             {showPicker && <Picker data={data} onEmojiSelect={handleSelect} />}
           </div>
         </div>
       </div>
-      <div className="col-span-9 ">
+
+      {/* input part for writing the message */}
+      <div className="mx-1 flex-1">
         <label className="relative block">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-            <SiLiberadotchat size={15} color="gray" />
+          <span className="absolute inset-y-0 left-0 md:flex items-center pl-2 hidden">
+            {/* <SiLiberadotchat size={15} color="gray" /> */}
+            <kbd class="px-1 py-1 text-xs font-semibold text-white bg-gray-300 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+              Ctrl
+            </kbd>
+            <span className="text-gray-300">+</span>
+            <kbd class="px-1 py-1 text-xs font-semibold text-white bg-gray-300 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+              K
+            </kbd>
           </span>
           <textarea
-            className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm resize-none overflow-hidden"
+            ref={textareaRef}
+            className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-3 md:pl-20 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm resize-none overflow-hidden"
             placeholder="Text me..."
             name="search"
             rows="1"
             style={{ maxHeight: "3rem" }}
             value={text}
             onInput={handleInput}
+            onKeyDown={handleKeyDown}
           ></textarea>
         </label>
       </div>
-      <div className={subimtClass} onClick={handleSubmit}>
+
+      {/* sending message button */}
+      <div
+        className="send-letter hidden md:flex items-center justify-center"
+        onClick={handleSubmit}
+      >
         <FaRegPaperPlane size={21} />
       </div>
     </div>
