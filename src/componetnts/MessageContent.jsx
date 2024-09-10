@@ -35,7 +35,6 @@ const Message = ({
       senderName: senderName,
     });
   };
-  console.log("first", messageId, image, status);
   return (
     <div ref={scrollRef} className={`message ${type} max-w-[90%]`}>
       {image ? (

@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../css/MessageSend.css";
 import { FaRegImage } from "react-icons/fa6";
-import { GoGift } from "react-icons/go";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { BsEmojiWink } from "react-icons/bs";
-import { SiLiberadotchat } from "react-icons/si";
 import { TbPhotoQuestion } from "react-icons/tb";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -26,7 +24,7 @@ const MessageSend = ({
   const [trackImageState, setTrackImageState] = useState("hidden");
   const [showPicker, setShowPicker] = useState(false);
   const textareaRef = useRef(null);
-
+  const [onFocus, setOnFocus] = useState(false);
   const handleSelect = (emoji) => {
     if (text) setText(text + emoji.native);
     else setText(emoji.native);
@@ -100,7 +98,7 @@ const MessageSend = ({
     if (event.key === "Enter" && event.ctrlKey) {
       event.preventDefault();
       let newText = "\n";
-      if (text) newText = text + "\n";
+      if (text && text.length) newText = text + "\n";
       setText(newText);
     } else if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
       // Trigger form submit on Enter (without Ctrl or Shift)
@@ -132,10 +130,28 @@ const MessageSend = ({
           </label>
         </div>
         {/* 2. emojis button div */}
-        <div className="send-item w-11 h-10 rounded-[50%] m-1">
-          <BsEmojiWink size={16} onClick={() => setShowPicker(!showPicker)} />
-          <div className="z-10 absolute bottom-16">
-            {showPicker && <Picker data={data} onEmojiSelect={handleSelect} />}
+        <div
+          className="send-item w-11 h-10 rounded-[50%] m-1"
+          onClick={() => {
+            setShowPicker(!showPicker);
+            setOnFocus(true);
+          }}
+        >
+          <BsEmojiWink size={16} />
+          <div className="z-10 absolute bottom-[4.2rem] left-1">
+            {showPicker && (
+              <Picker
+                data={data}
+                onEmojiSelect={handleSelect}
+                theme={"light"}
+                onClickOutside={() => {
+                  // LOGIC FOR PICKER FOCUSING CONDUCT...
+                  showPicker && !onFocus
+                    ? setShowPicker(!showPicker)
+                    : setOnFocus(false);
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -145,7 +161,7 @@ const MessageSend = ({
         <label className="relative block">
           <span className="absolute inset-y-0 left-0 md:flex items-center pl-2 hidden">
             {/* <SiLiberadotchat size={15} color="gray" /> */}
-            <kbd class="px-1 py-1 text-xs font-semibold text-white bg-gray-300 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+            <kbd className="px-1 py-1 text-xs font-semibold text-white bg-gray-300 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
               Ctrl
             </kbd>
             <span className="text-gray-300">+</span>
