@@ -148,6 +148,7 @@ const Messenger = () => {
   useEffect(() => {
     afSocket.current.on("updateMessageStatus", (data) => {
       updateMessageStatusToSeen(data.senderId, data.status);
+      // console.log(first)
     });
   }, []);
 
@@ -164,8 +165,9 @@ const Messenger = () => {
 
     if (socketMessage && currFriend) {
       if (
-        socketMessage.senderId === currFriend._id &&
-        socketMessage.receiverId === userData.id
+        socketMessage.senderId === currFriend._id ||
+        socketMessage.receiverId === currFriend._id
+        // socketMessage.receiverId === userData.id
       ) {
         // setting last received message into live chat box
         setMessage([...message, socketMessage]);
@@ -202,6 +204,12 @@ const Messenger = () => {
   useEffect(() => {
     afSocket.current.on("getActives", (data) => {
       setCurrentFrineds(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    afSocket.current.on("messageSeen", (data) => {
+      setSocketMessage(data);
     });
   }, []);
 
@@ -279,7 +287,7 @@ const Messenger = () => {
         },
       });
 
-      getMessage();
+      // getMessage();
       setText("");
       setImageToSend(null);
     } catch (error) {
