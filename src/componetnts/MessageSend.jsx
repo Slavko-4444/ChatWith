@@ -129,27 +129,26 @@ const MessageSend = ({
             <FaRegImage size={16} />{" "}
           </label>
         </div>
+
         {/* 2. emojis button div */}
-        <div
-          className="send-item w-11 h-10 rounded-[50%] m-1"
-          onClick={() => {
-            setShowPicker(!showPicker);
-            setOnFocus(true);
-          }}
-        >
-          <BsEmojiWink size={16} />
+        <div className="m-1">
+          <div
+            className="send-item w-11 h-10 rounded-[50%]"
+            onClick={() =>
+              setTimeout(() => {
+                setShowPicker(!showPicker);
+              })
+            }
+          >
+            <BsEmojiWink size={16} />
+          </div>
           <div className="z-10 absolute bottom-[4.2rem] left-1">
             {showPicker && (
               <Picker
                 data={data}
                 onEmojiSelect={handleSelect}
                 theme={"light"}
-                onClickOutside={() => {
-                  // LOGIC FOR PICKER FOCUSING CONDUCT...
-                  showPicker && !onFocus
-                    ? setShowPicker(!showPicker)
-                    : setOnFocus(false);
-                }}
+                onClickOutside={() => setShowPicker(false)}
               />
             )}
           </div>
