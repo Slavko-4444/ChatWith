@@ -136,10 +136,10 @@ const Messenger = () => {
         id: decoded.id,
         email: decoded.email,
         userName: decoded.userName,
-        image: `/images/${decoded.image}`,
+        image: decoded.image,
       });
 
-    afSocket.current = io("http://localhost:5000");
+    afSocket.current = io(import.meta.env.VITE_REACT_APP_API_URL);
     afSocket.current.on("getMessage", (data) => {
       setSocketMessage(data);
     });
@@ -190,7 +190,7 @@ const Messenger = () => {
       id: decoded.id,
       email: decoded.email,
       userName: decoded.userName,
-      image: `/images/${decoded.image}`,
+      image: decoded.image,
     };
     afSocket.current.emit("addUser", userInfo);
   }, []);
@@ -399,7 +399,10 @@ const Messenger = () => {
         >
           <div className="relative">
             <img
-              src={"/images/" + selectedImage.image}
+              src={
+                import.meta.env.VITE_REACT_APP_API_URL_STATIC +
+                selectedImage.image
+              }
               className="object-contain max-h-[95vh] max-w-[95vw] rounded-2xl"
               alt="Full View"
               onClick={(e) => e.stopPropagation()}

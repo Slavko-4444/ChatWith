@@ -46,7 +46,7 @@ const Login = () => {
         userName: decoded.userName,
         id: decoded.id,
         email: decoded.email,
-        image: `/images/${decoded.image}`,
+        image: decoded.image,
       });
 
       setAuthStatus({

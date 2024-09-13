@@ -9,7 +9,6 @@ const UserInfo = () => {
   const open = useRecoilValue(IsOpenAtom);
 
   const [userInfo, setUserInfo] = useRecoilState(userAtom);
-
   useEffect(() => {
     if (!userInfo.token || !userInfo.token.length) {
       const tk = localStorage.getItem("authToken");
@@ -20,7 +19,7 @@ const UserInfo = () => {
         userName: decoded.userName,
         id: decoded.id,
         email: decoded.email,
-        image: `/images/${decoded.image}`,
+        image: decoded.image,
       });
     }
   }, []);
@@ -34,7 +33,7 @@ const UserInfo = () => {
       } origin-left duration-300 flex flex-col pt-1 mb-1`}
     >
       <img
-        src={userInfo.image}
+        src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + userInfo.image}
         className="self-center cursor-pointer friend-image border border-white"
         alt="photo"
       />

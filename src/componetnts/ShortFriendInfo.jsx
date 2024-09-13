@@ -14,7 +14,7 @@ const ShortFriendInfo = () => {
       {/* // <div className="absolute flex justify-between items-center top-0 right-0 w-full border border-black"> */}
       <div className="flex items-center ">
         <img
-          src={"/images/" + currFriend.image}
+          src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + currFriend.image}
           className="chat-member-img chat"
           alt="photo"
         />

@@ -24,6 +24,7 @@ const RegisterModal = (props) => {
           "Content-Type": "multipart/form-data",
         },
       };
+
       let response = await axios.post(
         "/api/api/chat-with/user-register",
         formData,
@@ -41,6 +42,7 @@ const RegisterModal = (props) => {
         isAuthenticated: true,
       });
     } catch (error) {
+      console.log("sta je greska", error);
       setAuthStatus({
         successMessage: null,
         errorMessage: error.response.data.error.errorMessage,
@@ -55,7 +57,6 @@ const RegisterModal = (props) => {
         className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-gray-800 bg-opacity-75 z-50 flex justify-center"
         data-modal-backdrop="static"
         tabIndex="-1"
-        aria-hidden="true"
         onClick={toggleModal}
       >
         <div className="relative p-4 mt-40 w-full max-w-2xl">
@@ -68,7 +69,6 @@ const RegisterModal = (props) => {
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="static-modal"
-                onClick={toggleModal}
               >
                 <svg
                   className="w-3 h-3"

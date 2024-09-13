@@ -51,7 +51,7 @@ const ImagesData = () => {
       {chatImages.map((imgData, key) => (
         <div key={key}>
           <img
-            src={"/images/" + imgData.image}
+            src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + imgData.image}
             className="object-fill h-72 sm:h-96 xl:h-64 w-full rounded-2xl p-1 hover:cursor-pointer"
             alt="opa"
             onClick={() => handleImageClick(imgData)}
@@ -102,7 +102,7 @@ const FriendInfo = () => {
     <div className="h-full flex flex-1 flex-col">
       <div className="relative h-96 w-full overflow-hidden image-friend">
         <img
-          src={"/images/" + currFriend.image}
+          src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + currFriend.image}
           className="absolute inset-0 w-full h-full object-cover"
           alt="image-profile"
         />

@@ -39,7 +39,7 @@ const Message = ({
     <div ref={scrollRef} className={`message ${type} max-w-[90%]`}>
       {image ? (
         <img
-          src={`/images/${image}`}
+          src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + { image }}
           className="max-h-80 w-full h-auto  max-w-96 2xl:max-w-[26rem] 2xl:max-h-96 object-contain hover:cursor-pointer rounded"
           onClick={handleImageClick}
         />

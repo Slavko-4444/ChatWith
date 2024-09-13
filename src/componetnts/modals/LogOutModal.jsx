@@ -15,6 +15,7 @@ const LogOutModal = () => {
   const [seeLogut, setSeeLogout] = useRecoilState(LogOutAtom);
 
   const handleLogout = () => {
+    toggleModal();
     setUserInfo({ token: "" });
     localStorage.removeItem("authToken");
     Cookies.remove("authToken");

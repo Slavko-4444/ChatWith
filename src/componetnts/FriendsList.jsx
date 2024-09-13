@@ -70,7 +70,7 @@ const FriendBlock = ({ friend, msgInfo }) => {
         onClick={toggleMessageContent}
       >
         <img
-          src={"/images/" + friend.image}
+          src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + friend.image}
           className="friend-image f-i"
           alt="opa"
         />

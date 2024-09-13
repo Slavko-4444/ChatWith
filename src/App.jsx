@@ -9,9 +9,6 @@ import "./css/App.css";
 import { Route, Routes } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import ProtectedRoute from "./componetnts/ProtectedRoute";
-import { useRecoilState } from "recoil";
-import { LogOutAtom } from "./recoil/atoms/customAtoms";
-import LogOutModal from "./componetnts/modals/LogOutModal";
 
 function App() {
   return (

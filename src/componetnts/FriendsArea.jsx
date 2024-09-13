@@ -44,7 +44,13 @@ const FriendsArea = () => {
 
     fetchData();
   }, []);
-  const toggleModal = () => setSeeLogout(!seeLogut);
+  useEffect(() => {
+    console.log("a ovdje", seeLogut);
+  }, []);
+  const toggleModal = () => {
+    console.log("da li se ti uopste pozovse", seeLogut);
+    setSeeLogout(!seeLogut);
+  };
   return (
     <div
       className={`

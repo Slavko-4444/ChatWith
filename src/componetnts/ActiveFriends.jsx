@@ -37,7 +37,10 @@ const ActiveFriends = ({ actives }) => {
             key={index}
           >
             <img
-              src={active.userData.image}
+              src={
+                import.meta.env.VITE_REACT_APP_API_URL_STATIC +
+                active.userData.image
+              }
               className="friend-image"
               alt="opa"
             />
