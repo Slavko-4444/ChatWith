@@ -71,7 +71,6 @@ const MessageContent = ({ message, senderId, scrollRef, typingMessage }) => {
   const currFriend = useRecoilValue(currentFriendAtom);
   const [isWordAdded, setIsWordAdded] = useState(false);
 
-  // console.log("aa ovdje", message[message.length - 1]);
   useEffect(() => {
     if (
       typingMessage &&
