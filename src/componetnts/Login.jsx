@@ -32,7 +32,7 @@ const Login = () => {
         },
       };
       let response = await axios.post(
-        import.meta.env.VITE_REACT_APP_API_URL + "/api/chat-with/user-login",
+        "/api/api/chat-with/user-login",
         formData,
         config
       );
@@ -55,6 +55,7 @@ const Login = () => {
         isAuthenticated: true,
       });
     } catch (error) {
+      console.log("sta je", error);
       setAuthStatus({
         successMessage: null,
         errorMessage: error.response.data.error.errorMessage,
