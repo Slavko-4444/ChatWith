@@ -55,7 +55,6 @@ const Login = () => {
         isAuthenticated: true,
       });
     } catch (error) {
-      console.log("sta je", error);
       setAuthStatus({
         successMessage: null,
         errorMessage: error.response.data.error.errorMessage,
