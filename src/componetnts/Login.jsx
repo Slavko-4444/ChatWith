@@ -32,7 +32,7 @@ const Login = () => {
         },
       };
       let response = await axios.post(
-        "/api/api/chat-with/user-login",
+        import.meta.env.VITE_REACT_APP_API_URL + "/api/chat-with/user-login",
         formData,
         config
       );
