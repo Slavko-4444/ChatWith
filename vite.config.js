@@ -12,11 +12,7 @@ export default defineConfig({
       "/api": {
         target: process.env.VITE_REACT_APP_API_URL,
         changeOrigin: true,
-        rewrite: (path) => {
-          let p = path.replace(/^\/api/, "");
-          console.log("sta je", process.env.VITE_REACT_APP_API_URL);
-          return p;
-        },
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
