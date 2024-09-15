@@ -1,0 +1,2 @@
+/api/* https://your-backend-api-url.com/:splat 200
+/*           /index.html    200
