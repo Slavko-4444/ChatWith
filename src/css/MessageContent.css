@@ -30,7 +30,7 @@
 }
 
 .message.sending {
-  background-color: #c8e6c9;
+  background-color: #b83b3b41;
   align-self: flex-end;
   color: #333;
 }
@@ -57,12 +57,12 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #4caf50; /* Green for seen */
+  background-color: #c6dac7; /* Green for seen */
   margin-right: 0.25rem;
 }
 
 .message-status.sent::before {
-  background-color: #fbc02d; /* Yellow for sent */
+  background-color: #c6dac7; /* Yellow for sent */
 }
 
 .message-date {
