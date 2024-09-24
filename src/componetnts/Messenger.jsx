@@ -164,21 +164,24 @@ const Messenger = () => {
     updateMessageInFriendList(socketMessage);
 
     if (socketMessage && currFriend) {
+      if (socketMessage.senderId === currFriend._id)
+          receivingSPlay();
       if (
         socketMessage.senderId === currFriend._id ||
         socketMessage.receiverId === currFriend._id
-        // socketMessage.receiverId === userData.id
       ) {
         // setting last received message into live chat box
         setMessage([...message, socketMessage]);
-        receivingSPlay();
         setSeen(socketMessage.senderId, userData.id);
-      } else if (
+      } 
+      
+      if (
         socketMessage.senderId !== currFriend._id &&
         socketMessage.receiverId === userData.id
       ) {
-        setSocketMessage("");
+        console.log('zasto ne ulazis')
         setNotificationMessage([...notificationMessage, socketMessage]);
+        setSocketMessage("");
       }
     }
   }, [socketMessage]);

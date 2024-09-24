@@ -9,6 +9,7 @@ import "./css/App.css";
 import { Route, Routes } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import ProtectedRoute from "./componetnts/ProtectedRoute";
+import PageNotFoundComponent from "./componetnts/PageNotFoundComponent";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           </Route>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<PageNotFoundComponent />} />
         </Routes>
       </div>
       <Footer />

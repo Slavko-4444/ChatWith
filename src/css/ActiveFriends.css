@@ -2,6 +2,16 @@
 .friend-active-list::-webkit-scrollbar {
   display: none;
 }
+.message-notification {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  background-color: rgb(45, 127, 204);
+  border: 2px solid white; 
+  border-radius: 50%;
+}
 
 .online-status {
   position: absolute;

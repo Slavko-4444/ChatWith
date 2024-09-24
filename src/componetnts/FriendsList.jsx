@@ -7,8 +7,6 @@ import {
 } from "../recoil/atoms/friendsAtoms";
 import { HiOutlineChatBubbleOvalLeftEllipsis } from "react-icons/hi2";
 import { NotificationOfCommingMessageAtom } from "../recoil/atoms/notificationAtoms";
-import useSound from "use-sound";
-import notificationSound from "../audio/notification.mp3";
 import { FiCheck } from "react-icons/fi";
 import { IsOpenAtom } from "../recoil/atoms/customAtoms";
 
@@ -19,15 +17,12 @@ const FriendBlock = ({ friend, msgInfo }) => {
   );
   const [currFriend, setCurrFriend] = useRecoilState(currentFriendAtom);
   const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
-  const [notificationSPlay] = useSound(notificationSound);
-
   useEffect(() => {
     if (
       notificationMessage.length &&
       notificationMessage.some((item, index) => item.senderId === friend._id) &&
       currFriend._id !== friend._id
     ) {
-      notificationSPlay();
       setHasUnreadMessage(true);
     } else setHasUnreadMessage(false);
   }, [notificationMessage]);
@@ -69,11 +64,17 @@ const FriendBlock = ({ friend, msgInfo }) => {
         } group p-2 h-min-24  firend-element flex items-center`}
         onClick={toggleMessageContent}
       >
-        <img
-          src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + friend.image}
-          className="friend-image f-i"
-          alt="opa"
-        />
+        <div className="relative flex-shrink-0 hover:cursor-pointer">
+          <img
+            src={import.meta.env.VITE_REACT_APP_API_URL_STATIC + friend.image}
+            className="friend-image f-i"
+            alt="opa"
+          />
+          {hasUnreadMessage && (
+            <div className="message-notification z-[55]"></div>
+          )}
+        </div>
+
         <div
           className={`${
             !open && "hidden"
@@ -81,15 +82,6 @@ const FriendBlock = ({ friend, msgInfo }) => {
         >
           <p className="font-semibold lg:text-xl text-sm text-teal-100 capitalize flex">
             {friend.userName}
-            {hasUnreadMessage ? (
-              <HiOutlineChatBubbleOvalLeftEllipsis
-                className="ml-1"
-                color="green"
-                size={24}
-              />
-            ) : (
-              ""
-            )}
           </p>
           {msgInfo ? (
             <div
@@ -145,7 +137,7 @@ const FriendsList = () => {
   const friends = useRecoilValue(friendsListAtom);
 
   return (
-    <div className="mt-5 friend-list-all flex-1 overflow-y-auto">
+    <div className="mt-5 friend-list-all flex-1 overflow-y-auto pb-24">
       {friends.length ? (
         friends.map((friend, index) => (
           <FriendBlock friend={friend} key={index} msgInfo={friend.msgInfo} />

@@ -121,12 +121,12 @@ const FriendInfo = () => {
       </div>
       <div className="p-2 pt-4 m-3 border-t grid grid-row grid-cols-1 xl:grid-cols-3 gap-4">
         <div
-          className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
+          className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded- bg-slate-100 text-gray-400 hover:text-white font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("images")}
         >
           # images
         </div>
-        <div
+        {/* <div
           className="border md:text-sm 2xl:text-lg flex justify-center items-center rounded-3xl bg-slate-100 text-gray font-semibold hover:cursor-pointer hover:bg-slate-200"
           onClick={() => onClickItmeEvent("links")}
         >
@@ -137,11 +137,11 @@ const FriendInfo = () => {
           onClick={() => onClickItmeEvent("chatInfo")}
         >
           <p className="text-center"># chat info</p>
-        </div>
+        </div> */}
       </div>
       {clickItems.images ? <ImagesData /> : ""}
-      {clickItems.links ? <LinksData /> : ""}
-      {clickItems.chatInfo ? <ChatData /> : ""}
+      {/* {clickItems.links ? <LinksData /> : ""}
+      {clickItems.chatInfo ? <ChatData /> : ""} */}
     </div>
   );
 };

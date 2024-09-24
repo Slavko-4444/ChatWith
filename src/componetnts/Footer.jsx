@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const sections = [
   {
     title: "Chat_With_Me",
-    items: ["Home", "Login", "Register"],
+    items: ["Login", "Register"],
   },
 ];
 
