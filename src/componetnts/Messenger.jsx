@@ -27,6 +27,7 @@ import receivingSound from "../audio/sending2.mp3";
 import useSound from "use-sound";
 import LogOutModal from "./modals/LogOutModal";
 import { IsOpenAtom, LogOutAtom } from "../recoil/atoms/customAtoms";
+import { messagesAna, messagesMilica, messagesMilos } from "../data/DATA";
 
 const Messenger = () => {
   const scrollRef = useRef();
@@ -67,11 +68,17 @@ const Messenger = () => {
         },
       };
       let data = { status: "seen" };
-      const response = await axios.put(
-        `/api/api/chat-with/get-messages/${currFriend._id}`,
-        data,
-        config
-      );
+      let response;
+      if (currFriend._id === "66a15762228fb31ade6777cc")
+        response = messagesMilos;
+      if (currFriend._id === "66a95dd12955fd68216b7406") response = messagesAna;
+      if (currFriend._id === "66a1570e228fb31ade6777c3")
+        response = messagesMilica;
+      // const response = await axios.put(
+      //   `/api/api/chat-with/get-messages/${currFriend._id}`,
+      //   data,
+      //   config
+      // );
 
       const currIsActive = currentFriends.some((friend) => {
         if (friend.id === currFriend._id) return true;
@@ -81,9 +88,9 @@ const Messenger = () => {
       // update notification for seen status of message...
       if (currIsActive) setSeen(currFriend._id, userData.id);
 
-      setMessage(response.data.message);
+      setMessage(response);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
@@ -103,7 +110,9 @@ const Messenger = () => {
       })
     );
   }
-
+  // useEffect(() => {
+  //   console.log("imaa li promjena", friends);
+  // }, [friends]);
   // update last message info in friends list...
   function updateMessageInFriendList(msgInfo) {
     setFriends((prevFriends) =>
@@ -123,11 +132,11 @@ const Messenger = () => {
   }
 
   function setSeen(senderId, receiverId) {
-    afSocket.current.emit("seenMessage", {
-      receiverId: receiverId,
-      senderId: senderId,
-      status: "seen",
-    });
+    // afSocket.current.emit("seenMessage", {
+    //   receiverId: receiverId,
+    //   senderId: senderId,
+    //   status: "seen",
+    // });
   }
 
   useEffect(() => {
@@ -139,33 +148,32 @@ const Messenger = () => {
         image: decoded.image,
       });
 
-    afSocket.current = io(import.meta.env.VITE_REACT_APP_API_URL);
-    afSocket.current.on("getMessage", (data) => {
-      setSocketMessage(data);
-    });
+    // afSocket.current = io(import.meta.env.VITE_REACT_APP_API_URL);
+    // afSocket.current.on("getMessage", (data) => {
+    //   setSocketMessage(data);
+    // });
   }, []);
 
-  useEffect(() => {
-    afSocket.current.on("updateMessageStatus", (data) => {
-      updateMessageStatusToSeen(data.senderId, data.status);
-      // console.log(first)
-    });
-  }, []);
+  // useEffect(() => {
+  //   afSocket.current.on("updateMessageStatus", (data) => {
+  //     updateMessageStatusToSeen(data.senderId, data.status);
+  //     // console.log(first)
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    afSocket.current.on("typingMessageGet", (data) => {
-      if (data.cleanTypeDots === true) setTypingMessage({});
-      else setTypingMessage(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   afSocket.current.on("typingMessageGet", (data) => {
+  //     if (data.cleanTypeDots === true) setTypingMessage({});
+  //     else setTypingMessage(data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     // this is for last message notification on side bar...
     updateMessageInFriendList(socketMessage);
 
     if (socketMessage && currFriend) {
-      if (socketMessage.senderId === currFriend._id)
-          receivingSPlay();
+      if (socketMessage.senderId === currFriend._id) receivingSPlay();
       if (
         socketMessage.senderId === currFriend._id ||
         socketMessage.receiverId === currFriend._id
@@ -173,48 +181,88 @@ const Messenger = () => {
         // setting last received message into live chat box
         setMessage([...message, socketMessage]);
         setSeen(socketMessage.senderId, userData.id);
-      } 
-      
+      }
+
       if (
         socketMessage.senderId !== currFriend._id &&
         socketMessage.receiverId === userData.id
       ) {
-        console.log('zasto ne ulazis')
         setNotificationMessage([...notificationMessage, socketMessage]);
         setSocketMessage("");
       }
     }
   }, [socketMessage]);
 
-  useEffect(() => {}, [message]);
+  // useEffect(() => {}, [message]);
 
-  useEffect(() => {
-    const userInfo = {
-      id: decoded.id,
-      email: decoded.email,
-      userName: decoded.userName,
-      image: decoded.image,
-    };
-    afSocket.current.emit("addUser", userInfo);
-  }, []);
+  // useEffect(() => {
+  //   const userInfo = {
+  //     id: decoded.id,
+  //     email: decoded.email,
+  //     userName: decoded.userName,
+  //     image: decoded.image,
+  //   };
+  //   afSocket.current.emit("addUser", userInfo);
+  // }, []);
 
+  // just for demo...
+  /*
+   *
+   *
+   *
+   *
+   *
+   *
+   */
   useEffect(() => {
-    afSocket.current.on("getUser", (data) => {
-      setCurrentFrineds(data);
-    });
-  }, []);
+    const activeUsers = [
+      {
+        id: "66a1568f228fb31ade6777bf",
 
-  useEffect(() => {
-    afSocket.current.on("getActives", (data) => {
-      setCurrentFrineds(data);
-    });
+        userData: {
+          email: "sosicslavko8@gmail.com",
+          userName: "slavko sosic",
+          image: "1721849487385-8061-sls.jpg",
+          id: "66a1568f228fb31ade6777bf",
+        },
+      },
+      {
+        id: "66a15762228fb31ade6777cc",
+        userData: {
+          id: "66a15762228fb31ade6777cc",
+          userName: "Milos Sosic",
+          email: "milossosic12@gmail.com",
+          image: "1721849698040-6270-milos_moj.png",
+        },
+      },
+    ];
+    setCurrentFrineds(activeUsers);
   }, []);
+  /*
+   *
+   *
+   *
+   *
+   *
+   *
+   */
+  // useEffect(() => {
+  //   afSocket.current.on("getUser", (data) => {
+  //     setCurrentFrineds(data);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    afSocket.current.on("messageSeen", (data) => {
-      setSocketMessage(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   afSocket.current.on("getActives", (data) => {
+  //     setCurrentFrineds(data);
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   afSocket.current.on("messageSeen", (data) => {
+  //     setSocketMessage(data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (currFriend._id) {
@@ -253,30 +301,45 @@ const Messenger = () => {
       },
     };
     try {
-      const response = await axios.post(
-        "/api/api/chat-with/send-message-full",
-        formData,
-        config
-      );
-      const socketdata = { receiverId: currFriend._id, senderId: userData.id };
+      // const response = await axios.post(
+      //   "/api/api/chat-with/send-message-full",
+      //   formData,
+      //   config
+      // );
+      // const socketdata = { receiverId: currFriend._id, senderId: userData.id };
 
-      afSocket?.current.emit("typingMessage", {
-        ...socketdata,
-        msg: "",
-        cleanTypeDots: true,
-      });
+      // afSocket?.current.emit("typingMessage", {
+      //   ...socketdata,
+      //   msg: "",
+      //   cleanTypeDots: true,
+      // });
 
       const currTime = new Date();
-      afSocket.current.emit("sendMessage", {
-        senderId: userData.id,
-        senderName: userData.userName,
-        receiverId: currFriend._id,
-        time: currTime,
-        message: {
-          text: text,
-          image: newImageName,
-        },
-      });
+      function formatDateToISO(date) {
+        // Extract individual components
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
+        const day = String(date.getDate()).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+
+        // Combine them into the desired format
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
+      }
+      const formattedDate = formatDateToISO(currTime);
+
+      // afSocket.current.emit("sendMessage", {
+      //   senderId: userData.id,
+      //   senderName: userData.userName,
+      //   receiverId: currFriend._id,
+      //   time: currTime,
+      //   message: {
+      //     text: text,
+      //     image: newImageName,
+      //   },
+      // });
 
       updateMessageInFriendList({
         senderId: userData.id,
@@ -291,10 +354,24 @@ const Messenger = () => {
       });
 
       // getMessage();
+      let data = {
+        senderId: userData.id,
+        senderName: userData.userName,
+        receiverId: currFriend._id,
+        createdAt: formattedDate,
+        status: "seen",
+        updatedAt: formattedDate,
+        message: {
+          text: text,
+          image: imageToSend,
+        },
+      };
+      setSocketMessage(data);
+
       setText("");
       setImageToSend(null);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 

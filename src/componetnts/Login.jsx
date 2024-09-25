@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { authStatusAtom, userAtom } from "../recoil/atoms/userAtoms";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { slavkoUser } from "../data/DATA";
 
 const Login = () => {
   const [authForm, setAuthForm] = useState({
@@ -26,17 +27,24 @@ const Login = () => {
     formData.append("password", password);
 
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      let response = await axios.post(
-        "/api/api/chat-with/user-login",
-        formData,
-        config
-      );
-      let token = response.data.token;
+      //   const config = {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   };
+      //   let response = await axios.post(
+      //     "/api/api/chat-with/user-login",
+      //     formData,
+      //     config
+      //   );
+      //   let token = response.data.token;
+
+      let token;
+
+      if (password == slavkoUser.password && email === slavkoUser.email)
+        token = slavkoUser.token;
+      else throw new Error("User not found");
+
       localStorage.removeItem("authToken");
       localStorage.setItem("authToken", token);
 
@@ -50,14 +58,15 @@ const Login = () => {
       });
 
       setAuthStatus({
-        successMessage: response.data.successMessage,
+        successMessage: true,
         errorMessage: null,
         isAuthenticated: true,
       });
     } catch (error) {
       setAuthStatus({
         successMessage: null,
-        errorMessage: error.response.data.error.errorMessage,
+        // errorMessage: error.response.data.error.errorMessage,
+        errorMessage: [error.message],
         isAuthenticated: false,
       });
     }
@@ -73,6 +82,8 @@ const Login = () => {
       setAuthStatus({ ...authStatus, errorMessage: null });
     } else if (authStatus.successMessage) {
       toast.success(authStatus.successMessage);
+      console.log("je li uso");
+
       navigate("/");
       setAuthStatus({ ...authStatus, successMessage: null });
     }

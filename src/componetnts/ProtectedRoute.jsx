@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = () => {
-  const authToken = Cookies.get("authToken"); // Get the authToken from cookies
+  const authToken = localStorage.getItem("authToken"); // Get the authToken from cookies
   let isAllowed = false;
 
   if (!authToken) isAllowed = false;

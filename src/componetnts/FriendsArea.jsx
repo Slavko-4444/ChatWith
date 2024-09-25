@@ -17,6 +17,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import LogOutModal from "./modals/LogOutModal";
 import { IsOpenAtom, LogOutAtom } from "../recoil/atoms/customAtoms";
+import { friendsLastMessage } from "../data/DATA";
 
 const FriendsArea = () => {
   const [open, setOpen] = useRecoilState(IsOpenAtom);
@@ -28,17 +29,18 @@ const FriendsArea = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("/api/api/chat-with/get-last-message");
-
-        setFriends(response.data.friends);
+        // const response = await axios.get("/api/api/chat-with/get-last-message");
+        const response = friendsLastMessage.friends;
+        setFriends(response);
         setCurrFriend({
-          userName: response.data.friends[0].userName,
-          email: response.data.friends[0].email,
-          image: response.data.friends[0].image,
-          _id: response.data.friends[0]._id,
+          userName: response[0].userName,
+          email: response[0].email,
+          image: response[0].image,
+          _id: response[0]._id,
         });
       } catch (error) {
-        console.log(error.response.data.error.errorMessage);
+        // console.log(error.response.data.error.errorMessage);
+        console.log(error);
       }
     }
 
